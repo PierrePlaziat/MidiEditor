@@ -1,6 +1,4 @@
-##############
-# MidiEditor #
-##############
+# MidiEditor
 
 .NET Framework C# WPF Application
 Implements https://github.com/tebjan/Sanford.Multimedia.Midi
