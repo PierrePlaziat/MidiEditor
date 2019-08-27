@@ -1,3 +1,3 @@
-#MidiEditor
+# MidiEditor
 
 WIP
