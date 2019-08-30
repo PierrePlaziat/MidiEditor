@@ -16,7 +16,7 @@ namespace Sanford.Multimedia.Midi
 
         private ChannelStopper stopper = new ChannelStopper();
 
-        private MidiInternalClock clock = new MidiInternalClock();
+        public MidiInternalClock clock = new MidiInternalClock();
 
         private int tracksPlayingCount;
 

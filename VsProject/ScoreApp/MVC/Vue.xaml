@@ -35,8 +35,8 @@
                 <MenuItem Header="_Save" />
             </MenuItem>
             <MenuItem Header="_Track">
-                <MenuItem Header="_Add" />
-                <MenuItem Header="_Delete" />
+                <MenuItem Header="_Add"  Name="AddTrackMenuItem" Click="AddTrackMenuItem_Click"/>
+                <MenuItem Header="_Delete" Name="DeleteTrackMenuItem" Click="DeleteTrackMenuItem_Click" />
                 <Separator />
                 <MenuItem Header="_Settings" />
             </MenuItem>
@@ -65,9 +65,10 @@
         <!-- HEADER -->
         
         <DockPanel Grid.Column="0" Grid.Row="1" >
-            <Button Name="startButton" Content="Start" Click="StartButton_Click" Width="67"/>
-            <Button Name="stopButton" Content="Pause" Click="StopButton_Click" Width="66"/>
-            <Button Name="continueButton" Content="Continue" Click="ContinueButton_Click" Width="67"/>
+            <Button Name="startButton" Content="Start" Click="StartButton_Click" Width="50"/>
+            <Button Name="stopButton" Content="Pause" Click="StopButton_Click" Width="50"/>
+            <Button Name="continueButton" Content="Play" Click="ContinueButton_Click" Width="50"/>
+            <TextBox Text="{Binding Tempo}" Width="50"/>
         </DockPanel>
         
         <!-- BODY -->
@@ -78,14 +79,29 @@
             Grid.Row="2" 
             Grid.ColumnSpan="2">
             <StackPanel
-            Name="TracksPanel" 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Grid.Row="2" 
-            Grid.ColumnSpan="2">
-
+                Name="TracksPanel" 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.Row="2" 
+                Grid.ColumnSpan="2">
             </StackPanel>
         </ScrollViewer>
+        <Canvas 
+                Name="ProgressViewer" 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.Row="2" 
+                Grid.Column="1"
+                Grid.ColumnSpan="1"
+                ClipToBounds="true">
+                <Rectangle 
+                    Name="ProgressViewerBar"  
+                    Width="1" 
+                    Height="1000" 
+                    Fill="Red" 
+                    Canvas.Left="15" >
+            </Rectangle>
+            </Canvas>
 
         <!-- FOOTER -->
 

@@ -8,7 +8,8 @@
       d:DesignHeight="100" d:DesignWidth="600"
       Title="Midi_View">
 
-    <Grid Width="600" HorizontalAlignment="Left" Margin="0,0,0,1">
+    <Border BorderBrush="BlueViolet" BorderThickness="0" Name="Border" GotFocus="Grid_GotFocus" LostFocus="Grid_LostFocus">
+    <Grid HorizontalAlignment="Stretch" Margin="0,0,0,1" Background="Gray">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
@@ -17,8 +18,9 @@
         <Grid.RowDefinitions>
         </Grid.RowDefinitions>
 
+
         <!-- TrackHead -->
-        <Grid Width="200" HorizontalAlignment="Left" Grid.Column="0" Background="Gray">
+        <Grid Width="200" HorizontalAlignment="Left" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -37,11 +39,28 @@
         <GridSplitter></GridSplitter>
 
         <!-- TrackBody -->
+        <ScrollViewer Name="BodyScroll" Grid.Column="1" Background="White" Margin="0" VerticalScrollBarVisibility="Visible" Height="100">
+            <DockPanel>
+                <Canvas Name="TrackNotes" Width="15" Height="640" Background="white">
+                </Canvas>
+                <Canvas Name="TrackBody"  Height="640" MouseLeftButtonDown="TrackBody_MouseLeftButtonDown" MouseLeftButtonUp="TrackBody_MouseLeftButtonUp">
+                        <Canvas.Background>
+                            <VisualBrush TileMode="Tile" Stretch="Uniform" Viewport="24,5,24,5" ViewportUnits="Absolute">
+                                <VisualBrush.Visual>
+                                    <Rectangle Width="24" Height="5" Fill="LightGray" Stroke="Gray" StrokeThickness=".2"/>
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Canvas.Background>
+                    </Canvas>
+            </DockPanel>
+        </ScrollViewer>
 
-        <Canvas Name="TrackBody" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Background="White" Margin="0" >
-        </Canvas>
+
+
+
+
 
     </Grid>
-    
-    
+
+    </Border>
 </Page>

@@ -47,6 +47,7 @@ namespace Sanford.Multimedia.Midi
         /// Track name, default : "Track"
         public string Name { get; set; } = "Track";
         public Color color{ get; set; } = Color.Black;
+        public int id = 0;
 
         #region Track Members
 
@@ -92,7 +93,7 @@ namespace Sanford.Multimedia.Midi
         /// <param name="message">
         /// The IMidiMessage to insert.
         /// </param>
-        public void Insert(int position, IMidiMessage message)
+        public MidiEvent Insert(int position, IMidiMessage message)
         {
             #region Require
 
@@ -154,6 +155,8 @@ namespace Sanford.Multimedia.Midi
             AssertValid();
 
             #endregion
+
+            return newMidiEvent;
         }
 
         /// <summary>

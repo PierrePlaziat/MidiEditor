@@ -2,18 +2,27 @@
 using ScoreApp.TrackLine.MvcMidi;
 using System;
 using System.ComponentModel;
-using System.Windows;
+using System.Configuration;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace ScoreApp.MVC
 {
 
-    class Control
+    public class Control
     {
 
         #region CTOR
+
+        #region CONSTANTES
+
+        readonly int cellWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
+        readonly int cellHeigth = int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString());
+        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
+        readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
+        const int offsetForNoteAppelations = 15;
+        
+        #endregion
 
         readonly Model model;
         readonly Vue vue;
@@ -22,127 +31,46 @@ namespace ScoreApp.MVC
         {
             this.model = model;
             this.vue = vue;
+            InitModel();
+            InitVue();
+        }
+
+        private void InitModel()
+        {
+            MidiManager.timer.Tick += Timer_Tick;
+        }
+
+        private void InitVue()
+        {
             vue.Title = model.ProjectName;
-            MidiInit();
-            model.timer.Tick += Timer_Tick;
             vue.positionScrollBar.Scroll += new System.Windows.Controls.Primitives.ScrollEventHandler(
                     this.HandleScroll);
         }
 
         internal void Close()
         {
-            model.sequence.Dispose();
-            if (model.outDevice != null)
-            {
-                model.outDevice.Dispose();
-            }
-            model.outDialog.Dispose();
+            MidiManager.Unload();
         }
 
         #endregion
 
         #region LOADING GESTION
 
-        private void HandleLoadProgressChanged(object sender, ProgressChangedEventArgs e)
+        public void AddTrack()
         {
-            vue.ProgressionBar.Value = e.ProgressPercentage;
-        }
-
-        private void HandleLoadCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-
-            EnableUserInterractions();
-
-            vue.ProgressionBar.Value = 0;
-            if (e.Error == null)
-            {
-                vue.positionScrollBar.Value = 0;
-                vue.positionScrollBar.Maximum = model.sequence.GetLength();
-            }
-            else
-            {
-                System.Windows.MessageBox.Show(e.Error.Message);
-            }
+            MidiManager.sequence.tracks.Add(new Track());
             InitTracks();
         }
 
-        #endregion
-
-        #region MIDI GESTION
-
-        public void MidiInit()
+        internal void RemoveTrack()
         {
-            // do work here <- ?
-            if (OutputDevice.DeviceCount == 0)
-            {
-                System.Windows.Forms.MessageBox.Show("No MIDI output devices available.", "Error!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                Close();
-            }
-            else
-            {
-                try
-                {
-                    model.outDevice = new OutputDevice(model.outDeviceID);
-                    model.sequence.LoadCompleted += HandleLoadCompleted;
-                    model.sequence.LoadProgressChanged += HandleLoadProgressChanged;
-                }
-                catch (Exception ex)
-                {
-                    System.Windows.Forms.MessageBox.Show(ex.Message, "Error!",
-                        MessageBoxButtons.OK, MessageBoxIcon.Stop);
-
-                    Close();
-                }
-            }
-            model.sequencer.Position = 0;
-            model.sequencer.Sequence = model.sequence;
-            model.sequencer.PlayingCompleted += new EventHandler(HandlePlayingCompleted);
-            model.sequencer.ChannelMessagePlayed += new EventHandler<ChannelMessageEventArgs>(HandleChannelMessagePlayed);
-            model.sequencer.SysExMessagePlayed += new EventHandler<SysExMessageEventArgs>(HandleSysExMessagePlayed);
-            model.sequencer.Chased += new EventHandler<ChasedEventArgs>(HandleChased);
-            model.sequencer.Stopped += new EventHandler<StoppedEventArgs>(HandleStopped);
+            MidiManager.sequence.tracks.RemoveAt(model.selectedTrack);
+            InitTracks();
         }
 
-        private void HandleChannelMessagePlayed(object sender, ChannelMessageEventArgs e)
-        {
-            if (model.closing)
-            {
-                return;
-            }
-
-            model.outDevice.Send(e.Message);
-            vue.Piano.Send(e.Message);
-        }
-
-        private void HandleChased(object sender, ChasedEventArgs e)
-        {
-            foreach (ChannelMessage message in e.Messages)
-            {
-                model.outDevice.Send(message);
-            }
-        }
-
-        private void HandleSysExMessagePlayed(object sender, SysExMessageEventArgs e)
-        {
-            //     outDevice.Send(e.Message); Sometimes causes an exception to be thrown because the output device is overloaded.
-        }
-
-        private void HandleStopped(object sender, StoppedEventArgs e)
-        {
-            foreach (ChannelMessage message in e.Messages)
-            {
-                model.outDevice.Send(message);
-                vue.Piano.Send(message);
-            }
-        }
-
-        private void HandlePlayingCompleted(object sender, EventArgs e)
-        {
-            model.timer.Stop();
-        }
 
         #endregion
+            
 
         #region MENU GESTION
 
@@ -150,9 +78,9 @@ namespace ScoreApp.MVC
         {
             try
             {
-                model.sequencer.Stop();
-                model.playing = false;
-                model.sequence.LoadAsync(fileName);
+                MidiManager.sequencer.Stop();
+                MidiManager.playing = false;
+                MidiManager.sequence.LoadAsync(fileName);
 
                 DisableUserInterractions();
             }
@@ -170,9 +98,9 @@ namespace ScoreApp.MVC
         {
             try
             {
-                model.playing = true;
-                model.sequencer.Start();
-                model.timer.Start();
+                MidiManager.playing = true;
+                MidiManager.sequencer.Start();
+                MidiManager.timer.Start();
             }
             catch (Exception ex)
             {
@@ -184,9 +112,9 @@ namespace ScoreApp.MVC
         {
             try
             {
-                model.playing = false;
-                model.sequencer.Stop();
-                model.timer.Stop();
+                MidiManager.playing = false;
+                MidiManager.sequencer.Stop();
+                MidiManager.timer.Stop();
             }
             catch (Exception ex)
             {
@@ -198,9 +126,9 @@ namespace ScoreApp.MVC
         {
             try
             {
-                model.playing = true;
-                model.sequencer.Continue();
-                model.timer.Start();
+                MidiManager.playing = true;
+                MidiManager.sequencer.Continue();
+                MidiManager.timer.Start();
             }
             catch (Exception ex)
             {
@@ -212,14 +140,16 @@ namespace ScoreApp.MVC
         {
             if (!model.scrolling)
             {
-                vue.positionScrollBar.Value = Math.Min(model.sequencer.Position, vue.positionScrollBar.Maximum);
+                vue.positionScrollBar.Value = Math.Min(MidiManager.sequencer.Position, vue.positionScrollBar.Maximum);
+                vue.ProgressViewerBar.SetValue( Canvas.LeftProperty, 
+                    offsetForNoteAppelations + cellWidth * MidiManager.sequencer.Position / DAWhosReso );
             }
         }
 
         internal void HandleScroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
         {
             {
-                model.sequencer.Position = (int)vue.positionScrollBar.Value;
+                MidiManager.sequencer.Position = (int)vue.positionScrollBar.Value;
             }
         }
 
@@ -227,7 +157,7 @@ namespace ScoreApp.MVC
 
         #region MANAGE USER INTERRACTIONS
 
-        private void EnableUserInterractions()
+        public void EnableUserInterractions()
         {
             vue.Cursor = System.Windows.Input.Cursors.Arrow;
             vue.startButton.IsEnabled = true;
@@ -249,12 +179,23 @@ namespace ScoreApp.MVC
 
         #region TRACK GESTION
 
-        private void InitTracks()
+        public void InitTracks()
         {
-            foreach (Track track in model.sequence.tracks)
+            vue.TracksPanel.Children.Clear();
+            int i = 0;
+            foreach (Track track in MidiManager.sequence.tracks)
             {
-                vue.TracksPanel.Children.Add(new Frame() { Content = new Midi_View(track, model.sequencer) } );
+                track.id = i;
+                i++;
+                Midi_View trackView = new Midi_View(track);
+                trackView.ctrl.TrackFocused += DoFocusTrack;
+                vue.TracksPanel.Children.Add(new Frame() { Content = trackView } );
             }
+        }
+
+        private void DoFocusTrack(object sender, int e)
+        {
+            model.selectedTrack = e;
         }
 
         #endregion

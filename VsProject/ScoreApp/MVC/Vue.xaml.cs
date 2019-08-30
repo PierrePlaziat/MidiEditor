@@ -2,8 +2,6 @@
 using Sanford.Multimedia.Midi.UI;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 
 namespace ScoreApp.MVC
 {
@@ -13,8 +11,8 @@ namespace ScoreApp.MVC
 
         #region CTOR
 
-        Model model;
-        Control control;
+        public Model model;
+        public Control control;
 
         public Vue()
         {
@@ -40,6 +38,15 @@ namespace ScoreApp.MVC
             {
                 control.Open(model.openMidiFileDialog.FileName);
             }
+        }
+
+        private void AddTrackMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            control.AddTrack();
+        }
+        private void DeleteTrackMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            control.RemoveTrack();
         }
 
         #endregion
@@ -76,7 +83,7 @@ namespace ScoreApp.MVC
 
             #endregion
 
-            model.outDevice.Send(new ChannelMessage(ChannelCommand.NoteOn, 0, e.NoteID, 127));
+            MidiManager.outDevice.Send(new ChannelMessage(ChannelCommand.NoteOn, 0, e.NoteID, 127));
         }
 
         private void PianoControl_PianoKeyUp(object sender, PianoKeyEventArgs e)
@@ -90,7 +97,7 @@ namespace ScoreApp.MVC
 
             #endregion
 
-            model.outDevice.Send(new ChannelMessage(ChannelCommand.NoteOff, 0, e.NoteID, 0));
+            MidiManager.outDevice.Send(new ChannelMessage(ChannelCommand.NoteOff, 0, e.NoteID, 0));
         }
 
         #endregion

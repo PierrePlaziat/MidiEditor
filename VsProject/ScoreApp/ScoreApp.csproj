@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -57,8 +58,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="TrackLine\MvcMidi\Midi_Control.cs" />
-    <Compile Include="TrackLine\MvcMidi\Midi_Model.cs" />
+    <Compile Include="Manager\MidiManager.cs" />
+    <Compile Include="TrackLine\MvcMidi\MidiLineControl.cs" />
+    <Compile Include="TrackLine\MvcMidi\MidiLineModel.cs" />
     <Compile Include="TrackLine\MvcMidi\Midi_View.xaml.cs">
       <DependentUpon>Midi_View.xaml</DependentUpon>
     </Compile>
@@ -119,6 +121,9 @@
       <Project>{4269c72a-8d3a-4737-8f89-72eaa33ea9e1}</Project>
       <Name>Sanford.Multimedia.Midi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

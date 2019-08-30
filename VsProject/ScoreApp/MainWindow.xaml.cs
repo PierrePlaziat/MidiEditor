@@ -15,14 +15,22 @@ using System.Windows.Shapes;
 
 namespace ScoreApp
 {
-    /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
-    /// </summary>
+
+    /////////////////
+    // ENTRY POINT //
+    /////////////////
+    
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += MyWindow_Loaded;
+        }
+
+        private void MyWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            MidiManager.InitMidi();
             Close();
         }
     }

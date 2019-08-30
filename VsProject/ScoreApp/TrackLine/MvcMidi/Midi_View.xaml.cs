@@ -1,18 +1,7 @@
 ﻿using Sanford.Multimedia.Midi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
@@ -20,15 +9,65 @@ namespace ScoreApp.TrackLine.MvcMidi
     public partial class Midi_View : Page
     {
 
-        Midi_Control ctrl;
-        Midi_Model model;
+        #region CTOR
 
-        public Midi_View(Track track,Sequencer sequencer)
+        public MidiLineControl ctrl;
+        MidiLineModel model;
+
+        public Midi_View(Track track)
         {
-            model = new Midi_Model(track,sequencer);
+            model = new MidiLineModel(track);
             InitializeComponent();
-            ctrl = new Midi_Control(model,this);
+            ctrl = new MidiLineControl(model,this);
         }
+
+        readonly int cellWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
+        readonly int cellHeigth = int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString());
+        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
+        readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
+
+        #endregion
+        
+
+        private void Grid_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Border.BorderThickness = new Thickness(.5f);
+            ctrl.TrackGotFocus(sender, e);
+            BodyScroll.ScrollToVerticalOffset(BodyScroll.ScrollableHeight / 2);
+        }
+
+        private void Grid_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Border.BorderThickness = new Thickness(0);
+        }
+
+        #region Mouse Gestion
+
+        Point mouseDragStartPoint;
+        Point mouseDragEndPoint;
+        bool draggingNoteOnStave = false;
+
+        private void TrackBody_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            mouseDragStartPoint =  e.GetPosition((Canvas)sender);
+            draggingNoteOnStave = true;
+        }
+
+        private void TrackBody_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (draggingNoteOnStave)
+            {
+                draggingNoteOnStave = false;
+                mouseDragEndPoint = e.GetPosition((Canvas)sender);
+                double start = mouseDragStartPoint.X/cellWidth;
+                double end = mouseDragEndPoint.X / cellWidth;
+                int noteIndex = (int)notesQuantity - (int)( mouseDragStartPoint.Y/cellHeigth );
+                ctrl.InsertNote(start,end,noteIndex);
+            }
+        }
+
+        #endregion
+
     }
 
 }
