@@ -51,15 +51,9 @@ D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\bin\Debug\Sanford.Multimedia.Midi.
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\bin\Debug\Sanford.Multimedia.Midi.pdb
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\bin\Debug\Sanford.Multimedia.Midi.xml
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.csprojAssemblyReference.cache
-D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\MainWindow.g.cs
-D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\MVC\Vue.g.cs
-D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\TrackLine\MvcMidi\Midi_View.g.cs
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\App.g.cs
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp_MarkupCompile.cache
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp_MarkupCompile.lref
-D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\MainWindow.baml
-D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\MVC\Vue.baml
-D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\TrackLine\MvcMidi\Midi_View.baml
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.g.resources
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.Properties.Resources.resources
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.csproj.GenerateResource.cache
@@ -67,3 +61,9 @@ D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.csproj.CoreComp
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.csproj.CopyComplete
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.exe
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.pdb
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\MainWindow.g.cs
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\MainWindow.baml
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\Vue.g.cs
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\TrackLine\Midi\MidiLineView.g.cs
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\Vue.baml
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\TrackLine\Midi\MidiLineView.baml

@@ -58,37 +58,36 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Manager\MidiManager.cs" />
-    <Compile Include="TrackLine\MvcMidi\MidiLineControl.cs" />
-    <Compile Include="TrackLine\MvcMidi\MidiLineModel.cs" />
-    <Compile Include="TrackLine\MvcMidi\Midi_View.xaml.cs">
-      <DependentUpon>Midi_View.xaml</DependentUpon>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MIDI\MidiManager.cs" />
+    <Compile Include="UI\TrackLine\Midi\MidiLineControl.cs" />
+    <Compile Include="UI\TrackLine\Midi\MidiLineModel.cs" />
+    <Compile Include="UI\TrackLine\Midi\MidiLineView.xaml.cs">
+      <DependentUpon>MidiLineView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="MVC\Vue.xaml">
+    <Page Include="UI\Vue.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TrackLine\MvcMidi\Midi_View.xaml">
+    <Page Include="UI\TrackLine\Midi\MidiLineView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MVC\Control.cs" />
-    <Compile Include="MVC\Model.cs" />
-    <Compile Include="MVC\Vue.xaml.cs">
+    <Compile Include="UI\Control.cs" />
+    <Compile Include="UI\Model.cs" />
+    <Compile Include="UI\Vue.xaml.cs">
       <DependentUpon>Vue.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -124,6 +123,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\TrackLine\Score\" />
+    <Folder Include="UI\TrackLine\Wave\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

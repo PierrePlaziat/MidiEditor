@@ -6,7 +6,7 @@ using System.Windows.Controls;
 namespace ScoreApp.TrackLine.MvcMidi
 {
 
-    public partial class Midi_View : Page
+    public partial class MidiLineView : Page
     {
 
         #region CTOR
@@ -14,7 +14,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         public MidiLineControl ctrl;
         MidiLineModel model;
 
-        public Midi_View(Track track)
+        public MidiLineView(Track track)
         {
             model = new MidiLineModel(track);
             InitializeComponent();

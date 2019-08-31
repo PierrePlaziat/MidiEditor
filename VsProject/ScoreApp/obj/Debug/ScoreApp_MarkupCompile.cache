@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\App.xaml
-3-1206240244
+3846499232
 
-121508805218
+12877575523
 17242763966
-MainWindow.xaml;MVC\Vue.xaml;TrackLine\MvcMidi\Midi_View.xaml;
+MainWindow.xaml;UI\Vue.xaml;UI\TrackLine\Midi\MidiLineView.xaml;
 
 False
 

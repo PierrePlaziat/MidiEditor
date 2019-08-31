@@ -95,7 +95,7 @@
                 Grid.ColumnSpan="1"
                 ClipToBounds="true">
                 <Rectangle 
-                    Name="ProgressViewerBar"  
+                    Name="TimeBar"  
                     Width="1" 
                     Height="1000" 
                     Fill="Red" 
@@ -111,7 +111,7 @@
             VerticalAlignment="Stretch" 
             Grid.Row="3"/>
         <ScrollBar 
-            Name="positionScrollBar" 
+            Name="TimeScroller" 
             Grid.Column="1" 
             HorizontalAlignment="Stretch" 
             VerticalAlignment="Stretch" 

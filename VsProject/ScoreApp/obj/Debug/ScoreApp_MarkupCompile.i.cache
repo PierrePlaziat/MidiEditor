@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Plaziat\Desktop\Sanford.Multimedia.Midi-master\ScoreApp\obj\Debug\
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\
 ScoreApp
 none
 false
 DEBUG;TRACE
-C:\Users\Plaziat\Desktop\Sanford.Multimedia.Midi-master\ScoreApp\App.xaml
-3-1206240244
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\App.xaml
+3846499232
 
-16-2079035664
-17-2096261589
-MainWindow.xaml;MVC\Vue.xaml;TrackLine\MvcMidi\Midi_View.xaml;
+161584701937
+17242763966
+MainWindow.xaml;UI\Vue.xaml;UI\TrackLine\Midi\MidiLineView.xaml;
 
 False
 

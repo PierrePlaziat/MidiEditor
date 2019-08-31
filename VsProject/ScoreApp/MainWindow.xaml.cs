@@ -15,10 +15,6 @@ using System.Windows.Shapes;
 
 namespace ScoreApp
 {
-
-    /////////////////
-    // ENTRY POINT //
-    /////////////////
     
     public partial class MainWindow : Window
     {
@@ -30,7 +26,6 @@ namespace ScoreApp
 
         private void MyWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            MidiManager.InitMidi();
             Close();
         }
     }

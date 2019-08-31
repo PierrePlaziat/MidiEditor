@@ -8,15 +8,17 @@ using System.Windows;
 
 namespace ScoreApp
 {
-    /// <summary>
-    /// Logique d'interaction pour App.xaml
-    /// </summary>
+
+    /////////////////
+    // ENTRY POINT //
+    /////////////////
+    
     public partial class App : Application
     {
 
         public App()
         {
-            new ScoreApp.MVC.Vue();
+            MidiManager.Init(new ScoreApp.MVC.Vue());
         }
 
     }

@@ -9,7 +9,29 @@ namespace ScoreApp.MVC
     public class Model : INotifyPropertyChanged
     {
 
-        #region NOTIFY PROPERTY
+        #region CONFIG
+
+        public string ProjectName = "New Project";
+        public string Author = "Anonymous";
+        public string Notes = "";
+
+        #endregion
+
+        #region STATE
+
+        public int selectedTrack = 0;
+        public bool manuallyScrolling = false;
+        public bool closing = false;
+        public bool playing = false;
+        public int Tempo
+        {
+            get { return MidiManager.Tempo;  }
+            set { MidiManager.Tempo=value; RaisePropertyChanged("Tempo"); }
+        }
+
+        #endregion
+
+        #region NotifyProperty
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -21,24 +43,7 @@ namespace ScoreApp.MVC
                 Console.WriteLine(DateTime.Now + " Lm Widget Part >>> PropertyChanged : " + property);
             }
         }
-
         #endregion
 
-        public int selectedTrack = 0;
-
-        public string ProjectName = "New Project";
-
-
-        public bool scrolling = false;
-        public bool closing = false;
-        public bool playing = false;
-
-        public OpenFileDialog openMidiFileDialog = new OpenFileDialog();
-
-        public int Tempo
-        {
-            get { return MidiManager.sequencer.clock.Tempo; }
-            set { MidiManager.sequencer.clock.Tempo = value; RaisePropertyChanged("Tempo"); }
-        }
     }
 }
