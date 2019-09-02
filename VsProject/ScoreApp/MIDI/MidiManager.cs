@@ -13,10 +13,16 @@ namespace ScoreApp
 
         #region ATRB
 
+
         // IO
 
         private static OutputDevice outDevice;
         public static Timer timer = new Timer(); 
+
+        // MIDI BUILDER
+
+        private static ChannelMessageBuilder cmBuilder = new ChannelMessageBuilder();
+        private static SysCommonMessageBuilder scBuilder = new SysCommonMessageBuilder();
 
         // SEQUENCER
 
@@ -80,7 +86,7 @@ namespace ScoreApp
                 Unload();
             }
         }
-
+        
         private static void InitSequencer()
         {
             // create
@@ -224,26 +230,60 @@ namespace ScoreApp
 
         #endregion
 
+        #region PLOT GESTION
+
+        internal static Tuple<MidiEvent, MidiEvent> CreateNote(int channel, int noteIndex, Track Track, double start, double end, int velocity)
+        {
+            cmBuilder.Command = ChannelCommand.NoteOn;
+            cmBuilder.Data1 = noteIndex;
+            cmBuilder.Data2 = velocity;
+            cmBuilder.MidiChannel = channel;
+            cmBuilder.Build();
+            MidiEvent me1 = Track.Insert((int)start, cmBuilder.Result);
+            cmBuilder.Command = ChannelCommand.NoteOff;
+            cmBuilder.Data1 = noteIndex;
+            cmBuilder.Data2 = velocity;
+            cmBuilder.MidiChannel = channel;
+            cmBuilder.Build();
+            MidiEvent me2 = Track.Insert((int)start, cmBuilder.Result);
+            return new Tuple<MidiEvent, MidiEvent>(me1, me2);
+        }
+
+        #endregion
+
         #region DATA
 
         // TODO
         internal static void SaveFile(string fileName)
         {
-        }
-
-        internal static void OpenFile(string fileName)
-        {
+            Stop();
             try
             {
-                sequencer.Stop();
-                isPlaying = false;
-                sequence.LoadAsync(fileName);
-                vue.DisableUserInterractions();
+                // TODO open file dialog to select save name
+                // sequence.SaveAsync(fileName);
             }
             catch (Exception ex)
             {
                 vue.ErrorMessage(ex.Message);
             }
+            // on success
+            vue.DisableUserInterractions();
+        }
+
+        internal static void OpenFile(string fileName)
+        {
+            Stop();
+            try
+            {
+                // LOAD MIDI FILE
+                sequence.LoadAsync(fileName); 
+            }
+            catch (Exception ex)
+            {
+                vue.ErrorMessage(ex.Message);
+            }
+            // on success
+            vue.DisableUserInterractions();
         }
 
         public static void HandleLoadProgressChanged(object sender, ProgressChangedEventArgs e)

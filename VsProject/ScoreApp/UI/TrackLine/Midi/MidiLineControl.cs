@@ -53,14 +53,10 @@ namespace ScoreApp.TrackLine.MvcMidi
         internal void InsertNote(double start, double end, int noteIndex)
         {
             int channel = 0; int intensity = 100;
-            // Generate midi messages
-            ChannelMessage msgOn = new ChannelMessage(ChannelCommand.NoteOn, channel, noteIndex);
-            ChannelMessage msgOff = new ChannelMessage(ChannelCommand.NoteOff, channel, noteIndex);
-            // Add them to the track
-            MidiEvent eventOn = model.Track.Insert((int)start, msgOn);
-            MidiEvent eventOff = model.Track.Insert((int)end, msgOff);
-            // Make not on stave
-            DrawNote(start,end,noteIndex, eventOn, eventOff);
+            // Generate Midi Note
+            Tuple<MidiEvent, MidiEvent> msgs = MidiManager.CreateNote(channel,intensity,model.Track,start,end,intensity);
+            // Draw it on MidiRoll
+            DrawNote(start,end,noteIndex, msgs.Item1, msgs.Item2);
         }
 
         #region DRAW GRID
