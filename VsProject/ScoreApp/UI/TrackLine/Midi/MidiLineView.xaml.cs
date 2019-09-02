@@ -14,34 +14,50 @@ namespace ScoreApp.TrackLine.MvcMidi
         public MidiLineControl ctrl;
         MidiLineModel model;
 
+        readonly int cellWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
+        readonly int cellHeigth = int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString());
+        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
+        readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
+        readonly Thickness SelectedBorderThickness = new Thickness(.5f);
+        readonly Thickness UnselectedBorderThickness = new Thickness(0);
+
         public MidiLineView(Track track)
         {
             model = new MidiLineModel(track);
             InitializeComponent();
             ctrl = new MidiLineControl(model,this);
+            Loaded += MyWindow_Loaded;
         }
 
-        readonly int cellWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
-        readonly int cellHeigth = int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString());
-        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
-        readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
+        private void MyWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            BodyScroll.ScrollToVerticalOffset(BodyScroll.ScrollableHeight / 2);
+        }
 
         #endregion
-        
+
+        #region SHOW BORDERS ON FOCUS
 
         private void Grid_GotFocus(object sender, RoutedEventArgs e)
         {
-            Border.BorderThickness = new Thickness(.5f);
-            ctrl.TrackGotFocus(sender, e);
-            BodyScroll.ScrollToVerticalOffset(BodyScroll.ScrollableHeight / 2);
+            Border.BorderThickness = SelectedBorderThickness;
+            ctrl.TrackGotFocus(sender, e); 
         }
 
         private void Grid_LostFocus(object sender, RoutedEventArgs e)
         {
-            Border.BorderThickness = new Thickness(0);
+            Border.BorderThickness = UnselectedBorderThickness;
         }
 
-        #region Mouse Gestion
+        #endregion
+
+        #region ZOOM GESTION
+
+        // TODO
+
+        #endregion
+
+        #region PLOT GESTION
 
         Point mouseDragStartPoint;
         Point mouseDragEndPoint;
