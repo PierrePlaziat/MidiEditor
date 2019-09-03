@@ -167,7 +167,6 @@ namespace ScoreApp
             {
                 outDevice.Send(new ChannelMessage(v ? ChannelCommand.NoteOn : ChannelCommand.NoteOff, 0, noteID, 127));
             }
-
         }
 
         #region PLAY/PAUSE GESTION

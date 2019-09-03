@@ -86,7 +86,9 @@ namespace ScoreApp.TrackLine.MvcMidi
             Brush currentColor = Brushes.White;
             for (int i=0;i<128;i++)
             {
+                // identify note
                 noteWithoutOctave = i % 12;
+                // choose note color
                 switch (noteWithoutOctave)
                 {
                     case 0: currentColor = Brushes.White; break;
@@ -104,6 +106,7 @@ namespace ScoreApp.TrackLine.MvcMidi
                 }
                 if (i == 60) currentColor = Brushes.Yellow;
                 if (i == 69) currentColor = Brushes.Cyan;
+                // make rectangle
                 Rectangle rec = new Rectangle
                 {
                     Width = cellWidth,
@@ -112,11 +115,20 @@ namespace ScoreApp.TrackLine.MvcMidi
                     Stroke = Brushes.Gray,
                     StrokeThickness = .5f
                 };
+                // place rectangle
                 Canvas.SetLeft(rec, 0);
                 Canvas.SetTop(rec, (notesQuantity - i)*cellHeigth);
+                // piano toucn on rectangle
+                //rec.MouseLeftButtonDown += (s, e) => MidiManager.PianoTouch(true, i);
+                //rec.MouseLeftButtonUp += (s, e) => MidiManager.PianoTouch(false, i);
+                //rec.MouseLeave += (s, e) => MidiManager.PianoTouch(false, i);
+                // add it to the control
                 view.TrackNotes.Children.Add(rec);
             }
         }
+
+        static EventHandler OutOn = (s, e) => MessageBox.Show("Woho");
+        static EventHandler OutOff = (s, e) => MessageBox.Show("Woho");
 
         #endregion
 

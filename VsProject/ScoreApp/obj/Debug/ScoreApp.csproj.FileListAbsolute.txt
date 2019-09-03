@@ -91,3 +91,4 @@ D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.csproj.CopyComplete
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.exe
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.pdb
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\GeneratedInternalTypeHelper.g.cs

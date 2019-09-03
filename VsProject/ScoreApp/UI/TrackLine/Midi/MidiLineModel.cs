@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Windows.Media;
 
 namespace ScoreApp.TrackLine.MvcMidi
