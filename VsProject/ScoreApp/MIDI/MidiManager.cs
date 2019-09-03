@@ -232,6 +232,8 @@ namespace ScoreApp
 
         #region PLOT GESTION
 
+        readonly static double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
+
         internal static Tuple<MidiEvent, MidiEvent> CreateNote(int channel, int noteIndex, Track Track, double start, double end, int velocity)
         {
             cmBuilder.Command = ChannelCommand.NoteOn;
@@ -239,13 +241,13 @@ namespace ScoreApp
             cmBuilder.Data2 = velocity;
             cmBuilder.MidiChannel = channel;
             cmBuilder.Build();
-            MidiEvent me1 = Track.Insert((int)start, cmBuilder.Result);
+            MidiEvent me1 = Track.Insert((int)(start* DAWhosReso), cmBuilder.Result);
             cmBuilder.Command = ChannelCommand.NoteOff;
             cmBuilder.Data1 = noteIndex;
             cmBuilder.Data2 = 0;
             cmBuilder.MidiChannel = channel;
             cmBuilder.Build();
-            MidiEvent me2 = Track.Insert((int)end, cmBuilder.Result);
+            MidiEvent me2 = Track.Insert((int)(end* DAWhosReso), cmBuilder.Result);
             return new Tuple<MidiEvent, MidiEvent>(me1, me2);
         }
 

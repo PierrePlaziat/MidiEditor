@@ -31,8 +31,7 @@ namespace ScoreApp.MVC
         private void InitVue()
         {
             vue.Title = model.ProjectName;
-            vue.TimeScroller.Scroll += new System.Windows.Controls.Primitives.ScrollEventHandler(
-                    this.ManualScroll);
+            vue.TimeScroller.Scroll += new System.Windows.Controls.Primitives.ScrollEventHandler(ManualScroll);
         }
 
         internal void Close()
@@ -100,13 +99,13 @@ namespace ScoreApp.MVC
 
         internal void RemoveTrack()
         {
-            MidiManager.RemoveTrack(model.selectedTrack);
+            MidiManager.RemoveTrack(model.SelectedTrack);
             InitTracks();
         }
 
         private void FocusTrack(object sender, int e)
         {
-            model.selectedTrack = e;
+            model.SelectedTrack = e;
         }
 
         #endregion
@@ -116,22 +115,16 @@ namespace ScoreApp.MVC
         internal void TranslateTracks(int delta)
         {
             model.XOffset+=delta;
-            if (model.XOffset < 0) model.XOffset = 0;
-            InitTracks();
         }
 
         internal void ZoomTracksX(int delta)
         {
             model.XZoom += (float)delta/10;
-            if (model.XZoom < .1f) model.XZoom = .1f;
-            InitTracks();
         }
 
         internal void ZoomTracksY(int delta)
         {
-            model.YZoom += delta;
-            if (model.YZoom < .1f) model.YZoom = .1f;
-            InitTracks();
+            model.YZoom += (float)delta /10;
         }
 
         #endregion
