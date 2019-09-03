@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\
+D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\
 ScoreApp
 none
 false
 DEBUG;TRACE
-D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\App.xaml
+D:\GIT\MidiEditor\VsProject\ScoreApp\App.xaml
 3846499232
 
 12877575523
-17242763966
+172027622500
 MainWindow.xaml;UI\Vue.xaml;UI\TrackLine\Midi\MidiLineView.xaml;
 
 False

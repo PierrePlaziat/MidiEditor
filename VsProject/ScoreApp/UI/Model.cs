@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Forms;
-using Sanford.Multimedia.Midi;
-using Sanford.Multimedia.Midi.UI;
+﻿using System.ComponentModel;
+using System.Configuration;
+using System.Windows.Controls;
+using ScoreApp.TrackLine.MvcMidi;
 
 namespace ScoreApp.MVC
 {
@@ -23,11 +22,60 @@ namespace ScoreApp.MVC
         public bool manuallyScrolling = false;
         public bool closing = false;
         public bool playing = false;
-        public int Tempo
-        {
-            get { return MidiManager.Tempo;  }
-            set { MidiManager.Tempo=value; RaisePropertyChanged("Tempo"); }
+
+        public StackPanel tracksPanel;
+
+
+        private int xOffset = 0;
+        public int XOffset {
+            get { return xOffset; }
+            set
+            {
+                xOffset = value;
+                RaisePropertyChanged("XOffset");
+                foreach(Frame track in tracksPanel.Children)
+                {
+                    ((MidiLineView)track.Content).model.CellWidth = (int)(MidiManager.vue.model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString()));
+                }
+            }
         }
+
+
+        private float xZoom = 1;
+        public float XZoom {
+            get { return xZoom; }
+            set
+            {
+                xZoom = value;
+                RaisePropertyChanged("XZoom");
+                foreach (Frame track in tracksPanel.Children)
+                {
+                    ((MidiLineView)track.Content).model.CellWidth = (int)(XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString())); 
+                }
+            }
+        }
+
+
+        private float yZoom = 1;
+        public float YZoom
+        {
+            get { return yZoom; }
+            set
+            {
+                yZoom = value;
+                RaisePropertyChanged("YZoom");
+                foreach (Frame track in tracksPanel.Children)
+                {
+                    ((MidiLineView)track.Content).model.CellHeigth = (int)(YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString()));
+                }
+            }
+        }
+
+        //public int Tempo
+        //{
+        //    get { return MidiManager.Tempo;  }
+        //    set { MidiManager.Tempo=value; RaisePropertyChanged("Tempo"); }
+        //} = 120;
 
         #endregion
 
@@ -40,7 +88,6 @@ namespace ScoreApp.MVC
             if (PropertyChanged != null)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-                Console.WriteLine(DateTime.Now + " Lm Widget Part >>> PropertyChanged : " + property);
             }
         }
         #endregion

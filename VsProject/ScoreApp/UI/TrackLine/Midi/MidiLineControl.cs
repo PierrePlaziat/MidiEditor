@@ -17,6 +17,15 @@ namespace ScoreApp.TrackLine.MvcMidi
         MidiLineView view;
         MidiLineModel model;
 
+        #region CONSTANTES
+
+        readonly int cellWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
+        readonly int cellHeigth = int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString());
+        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
+        readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
+
+        #endregion
+
         public MidiLineControl (MidiLineModel model, MidiLineView view)
         {
             this.model = model;
@@ -33,18 +42,26 @@ namespace ScoreApp.TrackLine.MvcMidi
             DrawMidiEvents();
         }
 
-        #endregion
-        
-        #region CONSTANTES
-
-        readonly int cellWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
-        readonly int cellHeigth = int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString());
-        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
-        readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
-
-        #endregion
-        
         public event EventHandler<int> TrackFocused;
+
+        public static readonly DependencyProperty AttachedNoteOnProperty =
+            DependencyProperty.RegisterAttached(
+                "AttachedNoteOn",
+                typeof(MidiEvent),
+                typeof(MidiLineControl)
+        );
+
+        public static readonly DependencyProperty AttachedNoteOffProperty =
+            DependencyProperty.RegisterAttached(
+                "AttachedNoteOff",
+                typeof(MidiEvent),
+                typeof(MidiLineControl)
+        );
+
+        #endregion
+
+        #region INTERACTIONS
+
         internal void TrackGotFocus(object sender, RoutedEventArgs e)
         {
             TrackFocused.Invoke(sender,model.Track.id);
@@ -54,10 +71,12 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             int channel = 0; int intensity = 100;
             // Generate Midi Note
-            Tuple<MidiEvent, MidiEvent> msgs = MidiManager.CreateNote(channel,intensity,model.Track,start,end,intensity);
+            Tuple<MidiEvent, MidiEvent> msgs = MidiManager.CreateNote(channel, noteIndex, model.Track,start,end,intensity);
             // Draw it on MidiRoll
             DrawNote(start,end,noteIndex, msgs.Item1, msgs.Item2);
         }
+
+        #endregion
 
         #region DRAW GRID
 
@@ -189,20 +208,6 @@ namespace ScoreApp.TrackLine.MvcMidi
             rec.SetValue(AttachedNoteOffProperty, messageOff);
             view.TrackBody.Children.Add(rec);
         }
-
-        public static readonly DependencyProperty AttachedNoteOnProperty =
-            DependencyProperty.RegisterAttached(
-                "AttachedNoteOn",
-                typeof(MidiEvent),
-                typeof(MidiLineControl)
-        );
-
-        public static readonly DependencyProperty AttachedNoteOffProperty =
-            DependencyProperty.RegisterAttached(
-                "AttachedNoteOff",
-                typeof(MidiEvent),
-                typeof(MidiLineControl)
-        );
 
         private void NoteLeftDown(object sender, MouseButtonEventArgs e)
         {

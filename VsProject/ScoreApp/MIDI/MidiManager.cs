@@ -33,11 +33,11 @@ namespace ScoreApp
             get { return sequencer.Position; } 
             set { sequencer.Position = value; }
         }
-        public static int Tempo
-        {
-            get { return sequencer.clock.Tempo; }
-            set { sequencer.clock.Tempo = value; }
-        }
+        //public static int Tempo
+        //{
+        //    get { return sequencer.clock.Tempo; }
+        //    set { sequencer.clock.Tempo = value; }
+        //}
 
         // SEQUENCE
 
@@ -55,10 +55,10 @@ namespace ScoreApp
 
         public static void Init(Vue _vue)
         {
+            InitSequencer();
             vue = _vue;
             if (CheckMidiOutput())
                 InitOutputDevice();
-            InitSequencer();
         }
 
         private static bool CheckMidiOutput()
@@ -242,10 +242,10 @@ namespace ScoreApp
             MidiEvent me1 = Track.Insert((int)start, cmBuilder.Result);
             cmBuilder.Command = ChannelCommand.NoteOff;
             cmBuilder.Data1 = noteIndex;
-            cmBuilder.Data2 = velocity;
+            cmBuilder.Data2 = 0;
             cmBuilder.MidiChannel = channel;
             cmBuilder.Build();
-            MidiEvent me2 = Track.Insert((int)start, cmBuilder.Result);
+            MidiEvent me2 = Track.Insert((int)end, cmBuilder.Result);
             return new Tuple<MidiEvent, MidiEvent>(me1, me2);
         }
 
@@ -306,8 +306,8 @@ namespace ScoreApp
             {
                 System.Windows.MessageBox.Show(e.Error.Message);
             }
-            vue.model.Tempo = MidiManager.sequencer.clock.Tempo;
-            vue.control.InitTracks();
+            //e.model.Tempo = MidiManager.sequencer.clock.Tempo;
+            vue.ctrl.InitTracks();
         }
 
         #endregion
