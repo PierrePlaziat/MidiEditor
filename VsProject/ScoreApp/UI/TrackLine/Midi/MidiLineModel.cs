@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
@@ -31,10 +32,41 @@ namespace ScoreApp.TrackLine.MvcMidi
         }
 
         #endregion
-        
-        public Track Track { get; }        
+
+        public Track Track { get; }
         public int MidiInstrument { get; internal set; }
 
         public Dictionary<int, Tuple<int, MidiEvent>> lastNotesOn = new Dictionary<int, Tuple<int, MidiEvent>>();
+
+
+        private int cellWidth = 24;
+        public int CellWidth
+        {
+            get
+            {
+                return cellWidth;
+            }
+            set
+            {
+                cellWidth = value/10;
+                RaisePropertyChanged("CellWidth");
+            }
+        }
+
+        private int cellHeigth = 5;
+        public int CellHeigth
+        {
+            get
+            {
+                return cellHeigth;
+            }
+            set
+            {
+                cellHeigth = value/10;
+                RaisePropertyChanged("cellHeigth");
+            }
+        }
+
+
     }
 }

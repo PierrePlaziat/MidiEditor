@@ -1,11 +1,12 @@
-﻿using Sanford.Multimedia.Midi;
-using Sanford.Multimedia.Midi.UI;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
+using Sanford.Multimedia.Midi.UI;
 
 namespace ScoreApp.MVC
 {
@@ -24,21 +25,41 @@ namespace ScoreApp.MVC
         #region CTOR
 
         public Model model;
-        public Control control;
+        public Control ctrl;
 
         public Vue()
         {
             model = new Model();
             DataContext = model;
             InitializeComponent();
-            control = new Control(model, this);
+            ctrl = new Control(model, this);
             Show();
+            TracksPanel.Background = Brushes.Transparent;
+            TracksPanel.MouseWheel += MouseWheel;
+        }
+
+        private void MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            int value = e.Delta / 120;
+            Console.WriteLine("Molette : "+ value);
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                ctrl.TranslateTracks(value);
+            }
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                ctrl.ZoomTracksX(value);
+            }
+            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+            {
+                ctrl.ZoomTracksY(value);
+            }
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             MidiManager.Stop();
-            control.Close();
+            ctrl.Close();
         }
 
         #endregion
@@ -50,18 +71,18 @@ namespace ScoreApp.MVC
             OpenFileDialog openMidiFileDialog = new OpenFileDialog();
             if (openMidiFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                control.Open(openMidiFileDialog.FileName);
+                ctrl.Open(openMidiFileDialog.FileName);
             }
         }
 
         private void AddTrackMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            control.AddTrack();
+            ctrl.AddTrack();
         }
 
         private void DeleteTrackMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            control.RemoveTrack();
+            ctrl.RemoveTrack();
         }
 
         #endregion
@@ -70,7 +91,7 @@ namespace ScoreApp.MVC
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            control.Start();
+            ctrl.Start();
         }
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
@@ -80,7 +101,7 @@ namespace ScoreApp.MVC
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            control.Stop();
+            ctrl.Stop();
         }
 
         public void Update()

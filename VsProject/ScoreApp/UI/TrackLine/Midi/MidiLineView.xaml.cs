@@ -1,7 +1,10 @@
 ﻿using Sanford.Multimedia.Midi;
+using System;
 using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
@@ -12,10 +15,8 @@ namespace ScoreApp.TrackLine.MvcMidi
         #region CTOR
 
         public MidiLineControl ctrl;
-        MidiLineModel model;
+        public MidiLineModel model;
 
-        readonly int cellWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
-        readonly int cellHeigth = int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString());
         readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
         readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
         readonly Thickness SelectedBorderThickness = new Thickness(.5f);
@@ -24,9 +25,28 @@ namespace ScoreApp.TrackLine.MvcMidi
         public MidiLineView(Track track)
         {
             model = new MidiLineModel(track);
+            DataContext = model;
             InitializeComponent();
             ctrl = new MidiLineControl(model,this);
             Loaded += MyWindow_Loaded;
+            TrackBody.MouseWheel += MouseWheel;
+            TrackHeader.MouseWheel += MouseWheel;
+        }
+
+        private void MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                MidiManager.vue.ctrl.TranslateTracks(e.Delta);
+            }
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                MidiManager.vue.ctrl.ZoomTracksX(e.Delta);
+            }
+            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+            {
+                MidiManager.vue.ctrl.ZoomTracksY(e.Delta);
+            }
         }
 
         private void MyWindow_Loaded(object sender, RoutedEventArgs e)
@@ -75,9 +95,9 @@ namespace ScoreApp.TrackLine.MvcMidi
             {
                 draggingNoteOnStave = false;
                 mouseDragEndPoint = e.GetPosition((Canvas)sender);
-                double start = mouseDragStartPoint.X/cellWidth;
-                double end = mouseDragEndPoint.X / cellWidth;
-                int noteIndex = (int)notesQuantity - (int)( mouseDragStartPoint.Y/cellHeigth );
+                double start = mouseDragStartPoint.X/ model.CellWidth;
+                double end = mouseDragEndPoint.X / model.CellWidth;
+                int noteIndex = (int)notesQuantity - (int)(mouseDragStartPoint.Y/model.CellHeigth);
                 ctrl.InsertNote(start,end,noteIndex);
             }
         }

@@ -70,6 +70,14 @@
             <Button Name="continueButton" Content="Play" Click="ContinueButton_Click" Width="50"/>
             <TextBox Text="{Binding Tempo}" Width="50"/>
         </DockPanel>
+        <DockPanel Grid.Column="1" Grid.Row="1" >
+            <Label FontSize="9">ZoomX</Label>
+            <TextBox Text="{Binding XZoom}" Width="50"/>
+            <Label FontSize="9">ZoomY</Label>
+            <TextBox Text="{Binding YZoom}" Width="50"/>
+            <Label FontSize="9">Offset X</Label>
+            <TextBox Text="{Binding XOffset}" Width="50"/>
+        </DockPanel>
         
         <!-- BODY -->
 
@@ -83,7 +91,8 @@
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 Grid.Row="2" 
-                Grid.ColumnSpan="2">
+                Grid.ColumnSpan="2"
+                >
             </StackPanel>
         </ScrollViewer>
         <Canvas 

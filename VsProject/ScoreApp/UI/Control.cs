@@ -18,6 +18,7 @@ namespace ScoreApp.MVC
         {
             this.model = model;
             this.vue = vue;
+            model.tracksPanel = vue.TracksPanel;
             InitModel();
             InitVue();
         }
@@ -106,6 +107,31 @@ namespace ScoreApp.MVC
         private void FocusTrack(object sender, int e)
         {
             model.selectedTrack = e;
+        }
+
+        #endregion
+
+        #region ZOOM
+
+        internal void TranslateTracks(int delta)
+        {
+            model.XOffset+=delta;
+            if (model.XOffset < 0) model.XOffset = 0;
+            InitTracks();
+        }
+
+        internal void ZoomTracksX(int delta)
+        {
+            model.XZoom += (float)delta/10;
+            if (model.XZoom < .1f) model.XZoom = .1f;
+            InitTracks();
+        }
+
+        internal void ZoomTracksY(int delta)
+        {
+            model.YZoom += delta;
+            if (model.YZoom < .1f) model.YZoom = .1f;
+            InitTracks();
         }
 
         #endregion

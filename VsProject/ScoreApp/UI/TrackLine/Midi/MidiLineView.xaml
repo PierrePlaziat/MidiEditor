@@ -20,7 +20,7 @@
 
 
         <!-- TrackHead -->
-        <Grid Width="200" HorizontalAlignment="Left" Grid.Column="0">
+        <Grid Name="TrackHeader"  Width="200" HorizontalAlignment="Left" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -44,14 +44,14 @@
                 <Canvas Name="TrackNotes" Width="15" Height="640" Background="white">
                 </Canvas>
                 <Canvas Name="TrackBody"  Height="640" MouseLeftButtonDown="TrackBody_MouseLeftButtonDown" MouseLeftButtonUp="TrackBody_MouseLeftButtonUp">
-                        <Canvas.Background>
-                            <VisualBrush TileMode="Tile" Stretch="Uniform" Viewport="24,5,24,5" ViewportUnits="Absolute">
-                                <VisualBrush.Visual>
-                                    <Rectangle Width="24" Height="5" Fill="LightGray" Stroke="Gray" StrokeThickness=".2"/>
-                                </VisualBrush.Visual>
-                            </VisualBrush>
-                        </Canvas.Background>
-                    </Canvas>
+                    <Canvas.Background>
+                        <VisualBrush TileMode="Tile" Stretch="Uniform" Viewport="24 ,5,24,5" ViewportUnits="Absolute">
+                            <VisualBrush.Visual>
+                                <Rectangle Width="{Binding CellWidth}" Height="{Binding CellHeigth}" Fill="LightGray" Stroke="Gray" StrokeThickness=".2"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Canvas.Background>
+                </Canvas>
             </DockPanel>
         </ScrollViewer>
 
