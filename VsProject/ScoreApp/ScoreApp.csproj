@@ -62,6 +62,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MIDI\MidiManager.cs" />
+    <Compile Include="UI\TrackLine\Midi\Converter.cs" />
     <Compile Include="UI\TrackLine\Midi\MidiLineControl.cs" />
     <Compile Include="UI\TrackLine\Midi\MidiLineModel.cs" />
     <Compile Include="UI\TrackLine\Midi\MidiLineView.xaml.cs">

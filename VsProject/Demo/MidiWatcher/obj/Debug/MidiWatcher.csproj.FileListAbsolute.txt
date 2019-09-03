@@ -24,3 +24,16 @@ C:\Users\Plaziat\Desktop\Sanford.Multimedia.Midi-master\Demo\MidiWatcher\obj\Deb
 C:\Users\Plaziat\Desktop\Sanford.Multimedia.Midi-master\Demo\MidiWatcher\obj\Debug\MidiWatcher.csproj.CopyComplete
 C:\Users\Plaziat\Desktop\Sanford.Multimedia.Midi-master\Demo\MidiWatcher\obj\Debug\MidiWatcher.exe
 C:\Users\Plaziat\Desktop\Sanford.Multimedia.Midi-master\Demo\MidiWatcher\obj\Debug\MidiWatcher.pdb
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\bin\Debug\MidiWatcher.exe
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\bin\Debug\MidiWatcher.pdb
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\bin\Debug\Sanford.Multimedia.Midi.dll
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\bin\Debug\Sanford.Multimedia.Midi.pdb
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\bin\Debug\Sanford.Multimedia.Midi.xml
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\obj\Debug\MidiWatcher.csprojAssemblyReference.cache
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\obj\Debug\MidiWatcher.Form1.resources
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\obj\Debug\MidiWatcher.Properties.Resources.resources
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\obj\Debug\MidiWatcher.csproj.GenerateResource.cache
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\obj\Debug\MidiWatcher.csproj.CoreCompileInputs.cache
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\obj\Debug\MidiWatcher.csproj.CopyComplete
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\obj\Debug\MidiWatcher.exe
+D:\GIT\MidiEditor\VsProject\Demo\MidiWatcher\obj\Debug\MidiWatcher.pdb

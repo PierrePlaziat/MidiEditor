@@ -1,66 +1,75 @@
 ﻿<Page x:Class="ScoreApp.TrackLine.MvcMidi.MidiLineView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ScoreApp.TrackLine.MvcMidi"
-      mc:Ignorable="d" 
-      d:DesignHeight="100" d:DesignWidth="600"
-      Title="Midi_View">
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+	  xmlns:local="clr-namespace:ScoreApp.TrackLine.MvcMidi"
+	  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+	  xmlns:cv="clr-namespace:Converter"
+	  mc:Ignorable="d" 
+	  d:DesignHeight="100" d:DesignWidth="600"
+	  Title="Midi_View">
+	<Page.Resources>
+		<cv:DoubleToRectConverter x:Key="DoubleToRectConverter"/>
+	</Page.Resources>
 
-    <Border BorderBrush="BlueViolet" BorderThickness="0" Name="Border" GotFocus="Grid_GotFocus" LostFocus="Grid_LostFocus">
-    <Grid HorizontalAlignment="Stretch" Margin="0,0,0,1" Background="Gray">
+	<Border BorderBrush="BlueViolet" BorderThickness="0" Name="Border" GotFocus="Grid_GotFocus" LostFocus="Grid_LostFocus">
+	<Grid HorizontalAlignment="Stretch" Margin="0,0,0,1" Background="Gray">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-        </Grid.RowDefinitions>
-
-
-        <!-- TrackHead -->
-        <Grid Name="TrackHeader"  Width="200" HorizontalAlignment="Left" Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Button Name="TrackColor" Background="LightGreen" Height="100" Grid.RowSpan="4"/>
-            <Label Name="TrackName" Grid.Column="1" Content="T1"/>
-        </Grid>
-
-        <GridSplitter></GridSplitter>
-
-        <!-- TrackBody -->
-        <ScrollViewer Name="BodyScroll" Grid.Column="1" Background="White" Margin="0" VerticalScrollBarVisibility="Visible" Height="100">
-            <DockPanel>
-                <Canvas Name="TrackNotes" Width="15" Height="640" Background="white">
-                </Canvas>
-                <Canvas Name="TrackBody"  Height="640" MouseLeftButtonDown="TrackBody_MouseLeftButtonDown" MouseLeftButtonUp="TrackBody_MouseLeftButtonUp">
-                    <Canvas.Background>
-                        <VisualBrush TileMode="Tile" Stretch="Uniform" Viewport="24 ,5,24,5" ViewportUnits="Absolute">
-                            <VisualBrush.Visual>
-                                <Rectangle Width="{Binding CellWidth}" Height="{Binding CellHeigth}" Fill="LightGray" Stroke="Gray" StrokeThickness=".2"/>
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Canvas.Background>
-                </Canvas>
-            </DockPanel>
-        </ScrollViewer>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="200"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+		</Grid.RowDefinitions>
 
 
+		<!-- TrackHead -->
+		<Grid Name="TrackHeader"  Width="200" HorizontalAlignment="Left" Grid.Column="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="10"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"></RowDefinition>
+				<RowDefinition Height="*"></RowDefinition>
+				<RowDefinition Height="*"></RowDefinition>
+				<RowDefinition Height="*"></RowDefinition>
+			</Grid.RowDefinitions>
+
+			<Button Name="TrackColor" Background="{Binding TColor}" Height="100" Grid.RowSpan="4" Click="TrackColor_Click"/>
+			<Label Name="TrackName" Grid.Column="1" Content="T1"/>
+		</Grid>
+
+		<GridSplitter></GridSplitter>
+
+		<!-- TrackBody -->
+		<ScrollViewer Name="BodyScroll" Grid.Column="1" Background="White" Margin="0" VerticalScrollBarVisibility="Visible" Height="100">
+			<DockPanel>
+				<Canvas Name="TrackNotes" Width="15" Height="640" Background="white">
+				</Canvas>
+				<Canvas Name="TrackBody"  Height="640" MouseLeftButtonDown="TrackBody_MouseLeftButtonDown" MouseLeftButtonUp="TrackBody_MouseLeftButtonUp">
+					<Canvas.Background>
+
+						<VisualBrush TileMode="Tile" Stretch="Fill" 
+								Viewport="{Binding CellWidth, Converter={StaticResource DoubleToRectConverter}}" ViewportUnits="Absolute" 
+								Viewbox="{Binding CellHeigth, Converter={StaticResource DoubleToRectConverter}}" ViewboxUnits="Absolute">
+							<VisualBrush.Visual>
+								<Rectangle Width="{Binding CellWidth}" Height="{Binding CellHeigth}" Fill="LightGray" Stroke="Gray" StrokeThickness=".2"/>
+							</VisualBrush.Visual>
+						</VisualBrush>
+						
+					</Canvas.Background>
+				</Canvas>
+			</DockPanel>
+		</ScrollViewer>
 
 
 
 
-    </Grid>
 
-    </Border>
+
+	</Grid>
+
+	</Border>
 </Page>

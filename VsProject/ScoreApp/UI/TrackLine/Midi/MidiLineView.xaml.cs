@@ -18,7 +18,6 @@ namespace ScoreApp.TrackLine.MvcMidi
         public MidiLineModel model;
 
         readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
-        readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
         readonly Thickness SelectedBorderThickness = new Thickness(.5f);
         readonly Thickness UnselectedBorderThickness = new Thickness(0);
 
@@ -35,18 +34,7 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         private void MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-            {
-                MidiManager.vue.ctrl.TranslateTracks(e.Delta);
-            }
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-            {
-                MidiManager.vue.ctrl.ZoomTracksX(e.Delta);
-            }
-            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
-            {
-                MidiManager.vue.ctrl.ZoomTracksY(e.Delta);
-            }
+            MidiManager.vue.MouseWheel(sender, e);
         }
 
         private void MyWindow_Loaded(object sender, RoutedEventArgs e)
@@ -104,6 +92,17 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         #endregion
 
+        private void TrackColor_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO
+            Random rnd = new Random();
+            model.TColor = new SolidColorBrush(Color.FromRgb(
+                    (byte)rnd.Next(0, 255),
+                    (byte)rnd.Next(0, 255),
+                    (byte)rnd.Next(0, 255)
+                )
+            ); 
+        }
     }
 
 }

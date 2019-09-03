@@ -38,10 +38,17 @@ namespace ScoreApp.MVC
             TracksPanel.MouseWheel += MouseWheel;
         }
 
-        private void MouseWheel(object sender, MouseWheelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            MidiManager.Stop();
+            ctrl.Close();
+        }
+
+        #endregion
+
+        public void MouseWheel(object sender, MouseWheelEventArgs e)
         {
             int value = e.Delta / 120;
-            Console.WriteLine("Molette : "+ value);
             if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
             {
                 ctrl.TranslateTracks(value);
@@ -55,14 +62,6 @@ namespace ScoreApp.MVC
                 ctrl.ZoomTracksY(value);
             }
         }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            MidiManager.Stop();
-            ctrl.Close();
-        }
-
-        #endregion
 
         #region MENU
 
@@ -107,8 +106,8 @@ namespace ScoreApp.MVC
         public void Update()
         {
             double timePosition = MidiManager.Time * timeWidth / midiResolution;
-            TimeBar.SetValue(Canvas.LeftProperty, timePosition);
             TimeScroller.Value = Math.Min(MidiManager.Time, TimeScroller.Maximum);
+            TimeBar.SetValue(Canvas.LeftProperty, timePosition + notationOffset - model.XOffset);
         }
 
         #region PIANO WIDGET
