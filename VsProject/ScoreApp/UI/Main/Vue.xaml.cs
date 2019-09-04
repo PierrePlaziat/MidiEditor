@@ -16,8 +16,8 @@ namespace ScoreApp.MVC
 
         #region ATRB
 
-        readonly int timeWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
-        readonly double midiResolution = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
+        readonly int timeWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"]);
+        readonly double midiResolution = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"]);
         const int notationOffset = 15;
 
         #endregion
@@ -33,6 +33,13 @@ namespace ScoreApp.MVC
             DataContext = Model;
             Ctrl = new Control(Model, this);
             Show();
+        }
+
+        internal void Initialize()
+        {
+            InitializeComponent();
+            Ctrl.InitVue();
+            Model.TracksPanel = TracksPanel;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

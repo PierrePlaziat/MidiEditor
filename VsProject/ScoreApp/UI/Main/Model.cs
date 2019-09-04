@@ -49,7 +49,7 @@ namespace ScoreApp.MVC
                 RaisePropertyChanged("XOffset");
                 foreach(Frame track in TracksPanel.Children)
                 {
-                    ((MidiLineView)track.Content).model.XOffset = xOffset;
+                    ((MidiLineView)track.Content).Model.XOffset = xOffset;
                 }
             }
         }
@@ -64,7 +64,8 @@ namespace ScoreApp.MVC
                 RaisePropertyChanged("XZoom");
                 foreach (Frame track in TracksPanel.Children)
                 {
-                    ((MidiLineView)track.Content).model.CellWidth = (int)(XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString())); 
+                    ((MidiLineView)track.Content).Model.CellWidth = 
+                        (int)(XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"])); 
                 }
             }
         }
@@ -80,8 +81,8 @@ namespace ScoreApp.MVC
                 RaisePropertyChanged("YZoom");
                 foreach (Frame track in TracksPanel.Children)
                 {
-                    ((MidiLineView)track.Content).model.CellHeigth = 
-                        (int)(YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString()));
+                    ((MidiLineView)track.Content).Model.CellHeigth = 
+                        (int)(YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]));
                 }
             }
         }

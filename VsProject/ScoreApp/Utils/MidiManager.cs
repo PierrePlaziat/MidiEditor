@@ -61,12 +61,10 @@ namespace ScoreApp
 
         public static Vue Vue { get; set; }
 
-        public static void Init(Vue _vue)
+        public static void Init(Vue vue)
         {
+            Vue = vue;
             InitSequencer();
-            Vue = _vue;
-            Vue.InitializeComponent();
-            Vue.Ctrl.InitVue();
             if (CheckMidiOutput())
                 InitOutputDevice();
         }
@@ -248,7 +246,7 @@ namespace ScoreApp
 
         #region PLOT GESTION
 
-        readonly static double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
+        readonly static double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"]);
 
         internal static Tuple<MidiEvent, MidiEvent> CreateNote(int channel, int noteIndex, Track Track, double start, double end, int velocity)
         {

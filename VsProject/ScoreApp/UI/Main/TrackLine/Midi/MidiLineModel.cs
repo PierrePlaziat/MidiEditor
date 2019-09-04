@@ -1,66 +1,85 @@
 ﻿using Sanford.Multimedia.Midi;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Media;
 using TrackExtensions;
 using ScoreApp.Utils;
+using System.Configuration;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
     public class MidiLineModel : HandleBinding
     {
-        
+
+        public MidiLineControl Ctrl;
+
         #region CTOR
 
-        private SolidColorBrush tColor = new SolidColorBrush(Color.FromRgb(89, 201, 119));
-        public SolidColorBrush TColor
-        {
-            get { return tColor; }
-            set { tColor = value; RaisePropertyChanged("TColor"); }
-        }
 
         public MidiLineModel(Track track)
         {
             this.Track = track;
             Color color = track.Color();
             tColor = new SolidColorBrush(color);
+            LastNotesOn = new Dictionary<int, Tuple<int, MidiEvent>>();
         }
 
         #endregion
 
+        #region ATRB
+
+        private SolidColorBrush tColor;
+        public SolidColorBrush TColor
+        {
+            get { return tColor; }
+            set { tColor = value; RaisePropertyChanged("TColor"); }
+        }
+
         public Track Track { get; }
         public int MidiInstrument { get; internal set; }
 
-        public Dictionary<int, Tuple<int, MidiEvent>> lastNotesOn = new Dictionary<int, Tuple<int, MidiEvent>>();
+        public Dictionary<int, Tuple<int, MidiEvent>> LastNotesOn { get; set; }
 
+        #region ZOOM
+        #pragma warning disable S3237
 
-        private int cellWidth = 24;
-        public int CellWidth
+        public float CellWidth
         {
             get
             {
-                return cellWidth;
+                return (MidiManager.Vue.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"]));
             }
             set
             {
                 RaisePropertyChanged("CellWidth");
+                RaisePropertyChanged("CellHeigth");
+                Ctrl.DrawNoteAppelations();
+                Ctrl.DrawMidiEvents();
             }
         }
 
-        private int cellHeigth = 5;
-        public int CellHeigth
+        public float CellHeigth
         {
             get
             {
-                return cellHeigth;
+                return (MidiManager.Vue.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]));
             }
             set
             {
                 RaisePropertyChanged("CellHeigth");
+                RaisePropertyChanged("CellWidth");
+                Ctrl.DrawNoteAppelations();
+                Ctrl.DrawMidiEvents();
             }
         }
 
+        #pragma warning restore S3237
+        #endregion
+
         public int XOffset { get; internal set; }
+        public double DAWhosReso { get; } = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"]);
+
+        #endregion
+
     }
 }

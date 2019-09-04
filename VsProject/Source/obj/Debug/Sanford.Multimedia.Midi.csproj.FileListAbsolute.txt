@@ -32,4 +32,3 @@ D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csproj.Gene
 D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csproj.CoreCompileInputs.cache
 D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.dll
 D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.pdb
-D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csprojAssemblyReference.cache

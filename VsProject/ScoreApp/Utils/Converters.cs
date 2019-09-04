@@ -14,8 +14,8 @@ namespace Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return new Rect(0, 0,
-                (int)(MidiManager.Vue.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString())),
-                (int)(MidiManager.Vue.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString()))
+                (MidiManager.Vue.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"])),
+                (MidiManager.Vue.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]))
             );
         }
 

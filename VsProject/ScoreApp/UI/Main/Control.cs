@@ -87,7 +87,7 @@ namespace ScoreApp.MVC
             {
                 track.Id(); // init track id
                 MidiLineView lineView = new MidiLineView(track);
-                lineView.ctrl.TrackFocused += FocusTrack;
+                lineView.Ctrl.TrackFocused += FocusTrack;
                 vue.TracksPanel.Children.Add(new Frame() { Content = lineView } );
             }
         }

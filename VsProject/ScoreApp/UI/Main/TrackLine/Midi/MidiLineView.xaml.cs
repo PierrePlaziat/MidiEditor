@@ -15,25 +15,26 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         #region CTOR
 
-        public MidiLineControl ctrl;
-        public MidiLineModel model;
+        public MidiLineControl Ctrl { get; set; }
+        public MidiLineModel Model { get; set; }
 
-        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
+        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"]);
         readonly Thickness SelectedBorderThickness = new Thickness(.5f);
         readonly Thickness UnselectedBorderThickness = new Thickness(0);
 
         public MidiLineView(Track track)
         {
-            model = new MidiLineModel(track);
-            DataContext = model;
+            Model = new MidiLineModel(track);
+            DataContext = Model;
             InitializeComponent();
-            ctrl = new MidiLineControl(model,this);
+            Ctrl = new MidiLineControl(Model,this);
+            Model.Ctrl = Ctrl;
             Loaded += MyWindow_Loaded;
-            TrackBody.MouseWheel += MouseWheel;
-            TrackHeader.MouseWheel += MouseWheel;
+            TrackBody.MouseWheel += MouseWheeled;
+            TrackHeader.MouseWheel += MouseWheeled;
         }
 
-        private void MouseWheel(object sender, MouseWheelEventArgs e)
+        private void MouseWheeled(object sender, MouseWheelEventArgs e)
         {
             MidiManager.Vue.MouseWheeled(sender, e);
         }
@@ -50,19 +51,13 @@ namespace ScoreApp.TrackLine.MvcMidi
         private void Grid_GotFocus(object sender, RoutedEventArgs e)
         {
             Border.BorderThickness = SelectedBorderThickness;
-            ctrl.TrackGotFocus(sender, e); 
+            Ctrl.TrackGotFocus(sender, e); 
         }
 
         private void Grid_LostFocus(object sender, RoutedEventArgs e)
         {
             Border.BorderThickness = UnselectedBorderThickness;
         }
-
-        #endregion
-
-        #region ZOOM GESTION
-
-        // TODO
 
         #endregion
 
@@ -84,10 +79,10 @@ namespace ScoreApp.TrackLine.MvcMidi
             {
                 draggingNoteOnStave = false;
                 mouseDragEndPoint = e.GetPosition((Canvas)sender);
-                double start = mouseDragStartPoint.X/ model.CellWidth;
-                double end = mouseDragEndPoint.X / model.CellWidth;
-                int noteIndex = (int)notesQuantity - (int)(mouseDragStartPoint.Y/model.CellHeigth);
-                ctrl.InsertNote(start,end,noteIndex);
+                double start = mouseDragStartPoint.X/ Model.CellWidth;
+                double end = mouseDragEndPoint.X / Model.CellWidth;
+                int noteIndex = (int)notesQuantity - (int)(mouseDragStartPoint.Y/Model.CellHeigth);
+                Ctrl.InsertNote(start,end,noteIndex);
             }
         }
 
@@ -95,15 +90,14 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         private void TrackColor_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
             Random rnd = new Random();
             Color color = Color.FromRgb(
                 (byte)rnd.Next(0, 255),
                 (byte)rnd.Next(0, 255),
                 (byte)rnd.Next(0, 255)
             );
-            model.Track.SetColor(color);
-            model.TColor = new SolidColorBrush(color); 
+            Model.Track.SetColor(color);
+            Model.TColor = new SolidColorBrush(color); 
         }
     }
 

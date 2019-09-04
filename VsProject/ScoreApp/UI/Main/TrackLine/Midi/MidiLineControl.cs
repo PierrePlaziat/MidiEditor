@@ -17,16 +17,7 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         MidiLineView View { get; set; }
         MidiLineModel Model { get; set; }
-
-        #region CONSTANTES
-
-        readonly int cellWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString());
-        readonly int cellHeigth = int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString());
-        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"].ToString());
-        readonly double DAWhosReso = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"].ToString());
-
-        #endregion
-
+        
         public MidiLineControl (MidiLineModel model, MidiLineView view)
         {
             this.Model = model;
@@ -81,8 +72,9 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         #region DRAW GRID
 
-        private void DrawNoteAppelations()
+        public void DrawNoteAppelations()
         {
+            View.TrackNotes.Children.Clear();
             int noteWithoutOctave;
             Brush currentColor = Brushes.White;
             for (int i=0;i<128;i++)
@@ -110,15 +102,15 @@ namespace ScoreApp.TrackLine.MvcMidi
                 // make rectangle
                 Rectangle rec = new Rectangle
                 {
-                    Width = cellWidth,
-                    Height = cellHeigth,
+                    Width = 15,
+                    Height = Model.CellHeigth,
                     Fill = currentColor,
                     Stroke = Brushes.Gray,
                     StrokeThickness = .5f
                 };
                 // place rectangle
                 Canvas.SetLeft(rec, 0);
-                Canvas.SetTop(rec, (notesQuantity - i)*cellHeigth);
+                Canvas.SetTop(rec, (127 - i)*Model.CellHeigth);
                 // piano toucn on rectangle
                 int j = i;
                 rec.MouseLeftButtonDown += (s, e) => MidiManager.Playback(true, j);
@@ -126,6 +118,8 @@ namespace ScoreApp.TrackLine.MvcMidi
                 rec.MouseLeave += (s, e) => MidiManager.Playback(false, j);
                 // add it to the control
                 View.TrackNotes.Children.Add(rec);
+                View.TrackNotes.Height = 127 * Model.CellHeigth;
+                View.TrackBody.Height = 127 * Model.CellHeigth;
             }
         }
 
@@ -133,8 +127,9 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         #region DRAW MIDI EVENT
 
-        private void DrawMidiEvents()
+        public void DrawMidiEvents()
         {
+            View.TrackBody.Children.Clear();
             int i = 0;
             foreach (var midiEvent in Model.Track.Iterator())
             {
@@ -155,17 +150,16 @@ namespace ScoreApp.TrackLine.MvcMidi
                 status <= (int)ChannelCommand.NoteOff + ChannelMessage.MidiChannelMaxValue)
             {
                 int noteIndex = (int)midiEvent.MidiMessage.GetBytes()[1];
-                Tuple<int, MidiEvent> onPosition;
-                if(Model.lastNotesOn.TryGetValue(noteIndex,out onPosition))
+                if (Model.LastNotesOn.TryGetValue(noteIndex, out Tuple<int, MidiEvent> onPosition))
                 {
                     DrawNote(
-                        (double)onPosition.Item1/ DAWhosReso,
-                        (double)position / DAWhosReso,
-                        noteIndex, 
+                        (double)onPosition.Item1 / Model.DAWhosReso,
+                        (double)position / Model.DAWhosReso,
+                        noteIndex,
                         onPosition.Item2,
                         midiEvent
                     );
-                    Model.lastNotesOn.Remove(noteIndex);
+                    Model.LastNotesOn.Remove(noteIndex);
                 }
             }
             // NOTE ON
@@ -174,17 +168,16 @@ namespace ScoreApp.TrackLine.MvcMidi
             {
                 int noteIndex = (int)midiEvent.MidiMessage.GetBytes()[1];
                 int velocity = (int)midiEvent.MidiMessage.GetBytes()[2];
-                Tuple<int, MidiEvent> onPosition;
-                if (velocity>0)
+                if (velocity > 0)
                 {
-                    Model.lastNotesOn[noteIndex] = new Tuple<int, MidiEvent>(position, midiEvent);
+                    Model.LastNotesOn[noteIndex] = new Tuple<int, MidiEvent>(position, midiEvent);
                 }
                 else
                 {
-                    if (Model.lastNotesOn.TryGetValue(noteIndex, out onPosition))
+                    if (Model.LastNotesOn.TryGetValue(noteIndex, out Tuple<int, MidiEvent> onPosition))
                     {
                         DrawNote(onPosition.Item1, position, noteIndex, onPosition.Item2, midiEvent);
-                        Model.lastNotesOn.Remove(noteIndex);
+                        Model.LastNotesOn.Remove(noteIndex);
                     }
                 }
             }
@@ -207,12 +200,12 @@ namespace ScoreApp.TrackLine.MvcMidi
             {
                 rec.Width = 1;
             }
-            rec.Height = cellHeigth;
+            rec.Height = Model.CellHeigth;
             rec.Fill = Brushes.DarkSeaGreen;
             rec.Stroke = Brushes.DarkGreen;
             rec.StrokeThickness = .5f;
-            Canvas.SetLeft(rec,start*cellWidth);
-            Canvas.SetTop(rec, ((notesQuantity - noteIndex)*5));
+            Canvas.SetLeft(rec,start*Model.CellWidth);
+            Canvas.SetTop(rec, ((127 - noteIndex)*Model.CellHeigth));
             rec.MouseLeftButtonDown += NoteLeftDown;
             rec.MouseRightButtonDown += NoteRightDown;
             rec.SetValue(AttachedNoteOnProperty, messageOn);

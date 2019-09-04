@@ -54,7 +54,7 @@
 			<!-- TrackBody -->
 			<ScrollViewer Name="BodyScroll" Grid.Column="1" Background="White" Margin="0" VerticalScrollBarVisibility="Visible" Height="100">
 				<DockPanel>
-					<Canvas Name="TrackNotes" Width="15" Height="640" Background="white">
+					<Canvas Name="TrackNotes" Width="15" Background="white">
 					</Canvas>
 					<Canvas Name="TrackBody"  Height="640" MouseLeftButtonDown="TrackBody_MouseLeftButtonDown" MouseLeftButtonUp="TrackBody_MouseLeftButtonUp">
 						<Canvas.Background>
