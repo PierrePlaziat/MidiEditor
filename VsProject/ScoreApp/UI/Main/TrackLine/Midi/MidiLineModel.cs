@@ -11,7 +11,7 @@ namespace ScoreApp.TrackLine.MvcMidi
     public class MidiLineModel : HandleBinding
     {
 
-        public MidiLineControl Ctrl;
+        public MidiLineControl Ctrl { get; set; }
 
         #region CTOR
 

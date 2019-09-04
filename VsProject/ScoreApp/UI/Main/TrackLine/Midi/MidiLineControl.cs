@@ -215,11 +215,10 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         private void NoteLeftDown(object sender, MouseButtonEventArgs e)
         {
-            Rectangle rec = (Rectangle)sender;
-            MidiEvent noteOn = (MidiEvent)rec.GetValue(AttachedNoteOnProperty);
-            MidiEvent noteOff = (MidiEvent)rec.GetValue(AttachedNoteOffProperty);
-            Console.WriteLine("(TODO) NoteClicked : " + noteOn.MidiMessage.GetBytes());
-            // TODO Move and extend note
+            //Rectangle rec = (Rectangle)sender;
+            //MidiEvent noteOn = (MidiEvent)rec.GetValue(AttachedNoteOnProperty);
+            //MidiEvent noteOff = (MidiEvent)rec.GetValue(AttachedNoteOffProperty);
+            //Console.WriteLine("(TODO) NoteClicked : " + noteOn.MidiMessage.GetBytes());
         }
 
         private void NoteRightDown(object sender, MouseButtonEventArgs e)

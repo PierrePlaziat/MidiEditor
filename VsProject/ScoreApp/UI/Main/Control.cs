@@ -11,6 +11,10 @@ namespace ScoreApp.MVC
     public class Control
     {
 
+        // CHANGE INSTRUMENT :
+        //outDevice.Send(new ChannelMessage(ChannelCommand.ProgramChange, 0, (int) GeneralMidiInstrument.AltoSax));
+
+
         #region CTOR
 
         readonly Model model;
