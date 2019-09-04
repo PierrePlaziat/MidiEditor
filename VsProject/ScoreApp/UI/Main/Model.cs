@@ -2,56 +2,41 @@
 using System.Configuration;
 using System.Windows.Controls;
 using ScoreApp.TrackLine.MvcMidi;
+using ScoreApp.Utils;
 
 namespace ScoreApp.MVC
 {
-    public class Model : INotifyPropertyChanged
+    public class Model : HandleBinding
     {
-
-        #region Notify Property Implem
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void RaisePropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-            }
-        }
-        #endregion
 
         #region Project Values
 
-        public string ProjectPath = "D:/";
-        public string ProjectName = "New Project";
-        public string Author = "Anonymous";
-        public string Notes = "";
+        public string ProjectPath { get; set; } = "D:/";
+        public string ProjectName { get; set; } = "New Project";
+        public string Author { get; set; } = "Anonymous";
+        public string Notes { get; set; } = "";
 
         #endregion
 
         #region State
 
         public int SelectedTrack { get; set; } = 0;
-        public bool manuallyScrolling = false;
-        public bool closing = false;
-        public bool playing = false;
+        public bool ManuallyScrolling { get; set; } = false;
+        public bool Closing { get; set; } = false;
+        public bool Playing { get; set; } = false;
+
+        public int Tempo
+        {
+            get { return MidiManager.GetTempo(); }
+            set { MidiManager.SetTempo(value); RaisePropertyChanged("Tempo"); }
+        }
 
         #endregion
 
 
-        
-        //public int Tempo
-        //{
-        //    get { return MidiManager.Tempo;  }
-        //    set { MidiManager.Tempo=value; RaisePropertyChanged("Tempo"); }
-        //} = 120;
-
-
-
         #region Zoom & Offset
 
-        public StackPanel tracksPanel;
+        public StackPanel TracksPanel { get; set; }
 
 
         private int xOffset = 0;
@@ -62,14 +47,13 @@ namespace ScoreApp.MVC
                 if (value < 0) value = 0;
                 xOffset = value;
                 RaisePropertyChanged("XOffset");
-                foreach(Frame track in tracksPanel.Children)
+                foreach(Frame track in TracksPanel.Children)
                 {
-                    // TODO
+                    ((MidiLineView)track.Content).model.XOffset = xOffset;
                 }
             }
         }
         
-
         private float xZoom = 1;
         public float XZoom {
             get { return xZoom; }
@@ -78,14 +62,13 @@ namespace ScoreApp.MVC
                 if (value < .1f) value = .1f;
                 xZoom = value;
                 RaisePropertyChanged("XZoom");
-                foreach (Frame track in tracksPanel.Children)
+                foreach (Frame track in TracksPanel.Children)
                 {
                     ((MidiLineView)track.Content).model.CellWidth = (int)(XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"].ToString())); 
                 }
             }
         }
-
-
+        
         private float yZoom = 1;
         public float YZoom
         {
@@ -95,7 +78,7 @@ namespace ScoreApp.MVC
                 if (value < .1f) value = .1f;
                 yZoom = value;
                 RaisePropertyChanged("YZoom");
-                foreach (Frame track in tracksPanel.Children)
+                foreach (Frame track in TracksPanel.Children)
                 {
                     ((MidiLineView)track.Content).model.CellHeigth = 
                         (int)(YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"].ToString()));

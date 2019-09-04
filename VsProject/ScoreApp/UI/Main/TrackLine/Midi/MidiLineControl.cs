@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Configuration;
 using System.Windows.Input;
+using TrackExtensions;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
@@ -14,8 +15,8 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         #region CTOR
 
-        MidiLineView view;
-        MidiLineModel model;
+        MidiLineView View { get; set; }
+        MidiLineModel Model { get; set; }
 
         #region CONSTANTES
 
@@ -28,16 +29,16 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         public MidiLineControl (MidiLineModel model, MidiLineView view)
         {
-            this.model = model;
-            this.view = view;
+            this.Model = model;
+            this.View = view;
             Init();
         }
 
         private void Init()
         {
-            Console.WriteLine("Init track : " + model.Track.Name + " - Length : "+  model.Track.Length);
-            view.TrackName.Content = model.Track.Name;
-            view.TrackName.Content = model.Track.Name;
+            Console.WriteLine("Init track : " + Model.Track.Name() + " - Length : "+  Model.Track.Length);
+            View.TrackName.Content = Model.Track.Name();
+            View.TrackName.Content = Model.Track.Name();
             DrawNoteAppelations();
             DrawMidiEvents();
         }
@@ -64,14 +65,14 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         internal void TrackGotFocus(object sender, RoutedEventArgs e)
         {
-            TrackFocused.Invoke(sender,model.Track.id);
+            TrackFocused.Invoke(sender,Model.Track.Id());
         }
 
         internal void InsertNote(double start, double end, int noteIndex)
         {
             int channel = 0; int intensity = 100;
             // Generate Midi Note
-            Tuple<MidiEvent, MidiEvent> msgs = MidiManager.CreateNote(channel, noteIndex, model.Track,start,end,intensity);
+            Tuple<MidiEvent, MidiEvent> msgs = MidiManager.CreateNote(channel, noteIndex, Model.Track,start,end,intensity);
             // Draw it on MidiRoll
             DrawNote(start,end,noteIndex, msgs.Item1, msgs.Item2);
         }
@@ -119,16 +120,14 @@ namespace ScoreApp.TrackLine.MvcMidi
                 Canvas.SetLeft(rec, 0);
                 Canvas.SetTop(rec, (notesQuantity - i)*cellHeigth);
                 // piano toucn on rectangle
-                //rec.MouseLeftButtonDown += (s, e) => MidiManager.PianoTouch(true, i);
-                //rec.MouseLeftButtonUp += (s, e) => MidiManager.PianoTouch(false, i);
-                //rec.MouseLeave += (s, e) => MidiManager.PianoTouch(false, i);
+                int j = i;
+                rec.MouseLeftButtonDown += (s, e) => MidiManager.Playback(true, j);
+                rec.MouseLeftButtonUp += (s, e) => MidiManager.Playback(false, j);
+                rec.MouseLeave += (s, e) => MidiManager.Playback(false, j);
                 // add it to the control
-                view.TrackNotes.Children.Add(rec);
+                View.TrackNotes.Children.Add(rec);
             }
         }
-
-        static EventHandler OutOn = (s, e) => MessageBox.Show("Woho");
-        static EventHandler OutOff = (s, e) => MessageBox.Show("Woho");
 
         #endregion
 
@@ -137,7 +136,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         private void DrawMidiEvents()
         {
             int i = 0;
-            foreach (var midiEvent in model.Track.Iterator())
+            foreach (var midiEvent in Model.Track.Iterator())
             {
                 if (midiEvent.MidiMessage.MessageType == MessageType.Channel)
                 {
@@ -157,7 +156,7 @@ namespace ScoreApp.TrackLine.MvcMidi
             {
                 int noteIndex = (int)midiEvent.MidiMessage.GetBytes()[1];
                 Tuple<int, MidiEvent> onPosition;
-                if(model.lastNotesOn.TryGetValue(noteIndex,out onPosition))
+                if(Model.lastNotesOn.TryGetValue(noteIndex,out onPosition))
                 {
                     DrawNote(
                         (double)onPosition.Item1/ DAWhosReso,
@@ -166,7 +165,7 @@ namespace ScoreApp.TrackLine.MvcMidi
                         onPosition.Item2,
                         midiEvent
                     );
-                    model.lastNotesOn.Remove(noteIndex);
+                    Model.lastNotesOn.Remove(noteIndex);
                 }
             }
             // NOTE ON
@@ -178,14 +177,14 @@ namespace ScoreApp.TrackLine.MvcMidi
                 Tuple<int, MidiEvent> onPosition;
                 if (velocity>0)
                 {
-                    model.lastNotesOn[noteIndex] = new Tuple<int, MidiEvent>(position, midiEvent);
+                    Model.lastNotesOn[noteIndex] = new Tuple<int, MidiEvent>(position, midiEvent);
                 }
                 else
                 {
-                    if (model.lastNotesOn.TryGetValue(noteIndex, out onPosition))
+                    if (Model.lastNotesOn.TryGetValue(noteIndex, out onPosition))
                     {
                         DrawNote(onPosition.Item1, position, noteIndex, onPosition.Item2, midiEvent);
-                        model.lastNotesOn.Remove(noteIndex);
+                        Model.lastNotesOn.Remove(noteIndex);
                     }
                 }
             }
@@ -193,7 +192,7 @@ namespace ScoreApp.TrackLine.MvcMidi
             if (status >= (int)ChannelCommand.ProgramChange &&
                 status <= (int)ChannelCommand.ProgramChange + ChannelMessage.MidiChannelMaxValue)
             {
-                model.MidiInstrument = (int)midiEvent.MidiMessage.GetBytes()[1];
+                Model.MidiInstrument = (int)midiEvent.MidiMessage.GetBytes()[1];
             }
         }
 
@@ -218,7 +217,7 @@ namespace ScoreApp.TrackLine.MvcMidi
             rec.MouseRightButtonDown += NoteRightDown;
             rec.SetValue(AttachedNoteOnProperty, messageOn);
             rec.SetValue(AttachedNoteOffProperty, messageOff);
-            view.TrackBody.Children.Add(rec);
+            View.TrackBody.Children.Add(rec);
         }
 
         private void NoteLeftDown(object sender, MouseButtonEventArgs e)
@@ -235,10 +234,10 @@ namespace ScoreApp.TrackLine.MvcMidi
             Rectangle rec = (Rectangle)sender;
             MidiEvent noteOn = (MidiEvent)rec.GetValue(AttachedNoteOnProperty);
             MidiEvent noteOff = (MidiEvent)rec.GetValue(AttachedNoteOffProperty);
-            view.TrackBody.Children.Remove(rec);
+            View.TrackBody.Children.Remove(rec);
             // TODO delete midi event   
-            model.Track.RemoveAt(noteOn.AbsoluteTicks);
-            model.Track.RemoveAt(noteOff.AbsoluteTicks);
+            Model.Track.RemoveAt(noteOn.AbsoluteTicks);
+            Model.Track.RemoveAt(noteOff.AbsoluteTicks);
         }
 
         #endregion

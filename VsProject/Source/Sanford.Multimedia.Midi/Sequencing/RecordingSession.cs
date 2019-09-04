@@ -16,13 +16,10 @@ namespace Sanford.Multimedia.Midi
         {
             this.clock = clock;
         }
-
-        int idIterator = 0;
+        
         public void Build()
         {
             result = new Track();
-            result.id = idIterator;
-            idIterator++;
             buffer.Sort(new TimestampComparer());
 
             foreach(TimestampedMessage tm in buffer)

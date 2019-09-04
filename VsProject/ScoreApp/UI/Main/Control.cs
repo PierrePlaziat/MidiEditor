@@ -1,7 +1,9 @@
 ﻿using Sanford.Multimedia.Midi;
 using ScoreApp.TrackLine.MvcMidi;
 using System;
+using System.Windows.Media;
 using System.Windows.Controls;
+using TrackExtensions;
 
 namespace ScoreApp.MVC
 {
@@ -18,18 +20,19 @@ namespace ScoreApp.MVC
         {
             this.model = model;
             this.vue = vue;
-            model.tracksPanel = vue.TracksPanel;
+            model.TracksPanel = vue.TracksPanel;
             InitModel();
-            InitVue();
         }
 
         private void InitModel()
         {
-            MidiManager.timer.Tick += Update;
+            MidiManager.Timer.Tick += Update;
         }
 
-        private void InitVue()
+        public void InitVue()
         {
+            vue.TracksPanel.Background = Brushes.Transparent;
+            vue.TracksPanel.MouseWheel += vue.MouseWheeled;
             vue.Title = model.ProjectName;
             vue.TimeScroller.Scroll += new System.Windows.Controls.Primitives.ScrollEventHandler(ManualScroll);
         }
@@ -80,11 +83,9 @@ namespace ScoreApp.MVC
         public void InitTracks()
         {
             vue.TracksPanel.Children.Clear();
-            int i = 0;
             foreach (Track track in MidiManager.Tracks) 
             {
-                track.id = i;
-                i++;
+                track.Id(); // init track id
                 MidiLineView lineView = new MidiLineView(track);
                 lineView.ctrl.TrackFocused += FocusTrack;
                 vue.TracksPanel.Children.Add(new Frame() { Content = lineView } );

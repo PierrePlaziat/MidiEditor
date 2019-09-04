@@ -2504,9 +2504,6 @@
             Sequence.
             </summary>
         </member>
-        <member name="P:Sanford.Multimedia.Midi.Track.Name">
-            Track name, default : "Track"
-        </member>
         <member name="M:Sanford.Multimedia.Midi.Track.Insert(System.Int32,Sanford.Multimedia.Midi.IMidiMessage)">
             <summary>
             Inserts an IMidiMessage at the specified position in absolute ticks.

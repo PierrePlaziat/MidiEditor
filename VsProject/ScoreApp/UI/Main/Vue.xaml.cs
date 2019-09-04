@@ -21,45 +21,42 @@ namespace ScoreApp.MVC
         const int notationOffset = 15;
 
         #endregion
-        
+
         #region CTOR
 
-        public Model model;
-        public Control ctrl;
+        public Control Ctrl { get; set; }
+        public Model Model { get; set; }
 
         public Vue()
         {
-            model = new Model();
-            DataContext = model;
-            InitializeComponent();
-            ctrl = new Control(model, this);
+            Model = new Model();
+            DataContext = Model;
+            Ctrl = new Control(Model, this);
             Show();
-            TracksPanel.Background = Brushes.Transparent;
-            TracksPanel.MouseWheel += MouseWheel;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             MidiManager.Stop();
-            ctrl.Close();
+            Ctrl.Close();
         }
 
         #endregion
 
-        public void MouseWheel(object sender, MouseWheelEventArgs e)
+        public void MouseWheeled(object sender, MouseWheelEventArgs e)
         {
             int value = e.Delta / 120;
             if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
             {
-                ctrl.TranslateTracks(value);
+                Ctrl.TranslateTracks(value);
             }
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
-                ctrl.ZoomTracksX(value);
+                Ctrl.ZoomTracksX(value);
             }
             if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
             {
-                ctrl.ZoomTracksY(value);
+                Ctrl.ZoomTracksY(value);
             }
         }
 
@@ -70,18 +67,18 @@ namespace ScoreApp.MVC
             OpenFileDialog openMidiFileDialog = new OpenFileDialog();
             if (openMidiFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                ctrl.Open(openMidiFileDialog.FileName);
+                Ctrl.Open(openMidiFileDialog.FileName);
             }
         }
 
         private void AddTrackMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ctrl.AddTrack();
+            Ctrl.AddTrack();
         }
 
         private void DeleteTrackMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ctrl.RemoveTrack();
+            Ctrl.RemoveTrack();
         }
 
         #endregion
@@ -90,7 +87,7 @@ namespace ScoreApp.MVC
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            ctrl.Start();
+            Ctrl.Start();
         }
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
@@ -100,14 +97,14 @@ namespace ScoreApp.MVC
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            ctrl.Stop();
+            Ctrl.Stop();
         }
 
         public void Update()
         {
             double timePosition = MidiManager.Time * timeWidth / midiResolution;
             TimeScroller.Value = Math.Min(MidiManager.Time, TimeScroller.Maximum);
-            TimeBar.SetValue(Canvas.LeftProperty, timePosition + notationOffset - model.XOffset);
+            TimeBar.SetValue(Canvas.LeftProperty, timePosition + notationOffset - Model.XOffset);
         }
 
         #region PIANO WIDGET
@@ -115,13 +112,13 @@ namespace ScoreApp.MVC
         private void PianoControl_PianoKeyDown(object sender, PianoKeyEventArgs e)
         {
 
-            MidiManager.PianoTouch(true, e.NoteID);
+            MidiManager.Playback(true, e.NoteID);
         }
 
         private void PianoControl_PianoKeyUp(object sender, PianoKeyEventArgs e)
         {
 
-            MidiManager.PianoTouch(false, e.NoteID);
+            MidiManager.Playback(false, e.NoteID);
         }
 
         #endregion

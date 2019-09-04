@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using TrackExtensions;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
@@ -34,7 +35,7 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         private void MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            MidiManager.vue.MouseWheel(sender, e);
+            MidiManager.Vue.MouseWheeled(sender, e);
         }
 
         private void MyWindow_Loaded(object sender, RoutedEventArgs e)
@@ -96,12 +97,13 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             // TODO
             Random rnd = new Random();
-            model.TColor = new SolidColorBrush(Color.FromRgb(
-                    (byte)rnd.Next(0, 255),
-                    (byte)rnd.Next(0, 255),
-                    (byte)rnd.Next(0, 255)
-                )
-            ); 
+            Color color = Color.FromRgb(
+                (byte)rnd.Next(0, 255),
+                (byte)rnd.Next(0, 255),
+                (byte)rnd.Next(0, 255)
+            );
+            model.Track.SetColor(color);
+            model.TColor = new SolidColorBrush(color); 
         }
     }
 

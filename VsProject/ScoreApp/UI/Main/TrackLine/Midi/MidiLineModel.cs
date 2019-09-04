@@ -3,27 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Media;
+using TrackExtensions;
+using ScoreApp.Utils;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
-    public class MidiLineModel : INotifyPropertyChanged
+    public class MidiLineModel : HandleBinding
     {
-
-        #region NOTIFY PROPERTY
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void RaisePropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-                //Console.WriteLine(DateTime.Now + " >>> PropertyChanged : " + property);
-            }
-        }
-
-        #endregion
-
+        
         #region CTOR
 
         private SolidColorBrush tColor = new SolidColorBrush(Color.FromRgb(89, 201, 119));
@@ -36,6 +23,8 @@ namespace ScoreApp.TrackLine.MvcMidi
         public MidiLineModel(Track track)
         {
             this.Track = track;
+            Color color = track.Color();
+            tColor = new SolidColorBrush(color);
         }
 
         #endregion
@@ -72,6 +61,6 @@ namespace ScoreApp.TrackLine.MvcMidi
             }
         }
 
-
+        public int XOffset { get; internal set; }
     }
 }

@@ -8,6 +8,8 @@ using System.Collections.Generic;
 
 namespace ScoreApp
 {
+
+    /// Connects ScoreApp to Sanford Midi
     public static class MidiManager
     {
 
@@ -17,27 +19,33 @@ namespace ScoreApp
         // IO
 
         private static OutputDevice outDevice;
-        public static Timer timer = new Timer(); 
+        public static Timer Timer { get; } = new Timer(); 
 
         // MIDI BUILDER
 
         private static ChannelMessageBuilder cmBuilder = new ChannelMessageBuilder();
-        private static SysCommonMessageBuilder scBuilder = new SysCommonMessageBuilder();
+        //private static SysCommonMessageBuilder scBuilder = new SysCommonMessageBuilder();
 
         // SEQUENCER
 
         private static Sequencer sequencer;
-        public static bool isPlaying = false;
+        public static bool IsPlaying { get; set; } = false;
         public static int Time
         {
             get { return sequencer.Position; } 
             set { sequencer.Position = value; }
         }
-        //public static int Tempo
-        //{
-        //    get { return sequencer.clock.Tempo; }
-        //    set { sequencer.clock.Tempo = value; }
-        //}
+
+        public static int GetTempo()
+        {
+            return sequencer.clock.Tempo;
+        }
+
+        public static void SetTempo(int value)
+        {
+            if (value < 1) value = 1;
+            sequencer.clock.Tempo = value;
+        }
 
         // SEQUENCE
 
@@ -51,12 +59,14 @@ namespace ScoreApp
         
         #region CTOR
 
-        public static Vue vue;
+        public static Vue Vue { get; set; }
 
         public static void Init(Vue _vue)
         {
             InitSequencer();
-            vue = _vue;
+            Vue = _vue;
+            Vue.InitializeComponent();
+            Vue.Ctrl.InitVue();
             if (CheckMidiOutput())
                 InitOutputDevice();
         }
@@ -65,7 +75,7 @@ namespace ScoreApp
         {
             if (OutputDevice.DeviceCount == 0)
             {
-                vue.ErrorMessage("No MIDI output devices available.");
+                Vue.ErrorMessage("No MIDI output devices available.");
                 Unload();
                 return false;
             }
@@ -82,7 +92,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                vue.ErrorMessage(ex.Message);
+                Vue.ErrorMessage(ex.Message);
                 Unload();
             }
         }
@@ -104,7 +114,6 @@ namespace ScoreApp
             sequence.LoadProgressChanged += HandleLoadProgressChanged;
         }
         
-        // TODO maybe cause of cloing error, investigate further
         public static void Unload()
         {
             sequence.Dispose();
@@ -120,13 +129,13 @@ namespace ScoreApp
         
         private static void HandleChannelMessagePlayed(object sender, ChannelMessageEventArgs e)
         {
-            if (vue.model.closing)
+            if (Vue.Model.Closing)
             {
                 return;
             }
 
             MidiManager.outDevice.Send(e.Message);
-            vue.Piano.Send(e.Message);
+            Vue.Piano.Send(e.Message);
         }
 
         private static void HandleChased(object sender, ChasedEventArgs e)
@@ -147,27 +156,18 @@ namespace ScoreApp
             foreach (ChannelMessage message in e.Messages)
             {
                 MidiManager.outDevice.Send(message);
-                vue.Piano.Send(message);
+                Vue.Piano.Send(message);
             }
         }
 
         private static void HandlePlayingCompleted(object sender, EventArgs e)
         {
-            timer.Stop();
+            Timer.Stop();
         }
 
         #endregion
 
         #region  MTDS
-
-        // TODO move to IMusicControl
-        internal static void PianoTouch(bool v, int noteID)
-        {
-            if (!isPlaying)
-            {
-                outDevice.Send(new ChannelMessage(v ? ChannelCommand.NoteOn : ChannelCommand.NoteOff, 0, noteID, 127));
-            }
-        }
 
         #region PLAY/PAUSE GESTION
 
@@ -175,13 +175,13 @@ namespace ScoreApp
         {
             try
             {
-                isPlaying = true;
+                IsPlaying = true;
                 sequencer.Start();
-                timer.Start();
+                Timer.Start();
             }
             catch (Exception ex)
             {
-                vue.ErrorMessage(ex.Message);
+                Vue.ErrorMessage(ex.Message);
             }
         }
 
@@ -189,13 +189,13 @@ namespace ScoreApp
         {
             try
             {
-                isPlaying = false;
+                IsPlaying = false;
                 sequencer.Stop();
-                timer.Stop();
+                Timer.Stop();
             }
             catch (Exception ex)
             {
-                vue.ErrorMessage(ex.Message);
+                Vue.ErrorMessage(ex.Message);
             }
         }
 
@@ -203,13 +203,30 @@ namespace ScoreApp
         {
             try
             {
-                isPlaying = true;
+                IsPlaying = true;
                 sequencer.Continue();
-                timer.Start();
+                Timer.Start();
             }
             catch (Exception ex)
             {
-                vue.ErrorMessage(ex.Message);
+                Vue.ErrorMessage(ex.Message);
+            }
+        }
+
+        internal static void Playback(bool v, int noteID)
+        {
+            if (!IsPlaying)
+            {
+                try
+                {
+                    outDevice.Send(
+                        new ChannelMessage(v ? ChannelCommand.NoteOn : ChannelCommand.NoteOff, 0, noteID, 127)
+                    );
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("MidiRollDebug : " + e);
+                }
             }
         }
 
@@ -253,22 +270,21 @@ namespace ScoreApp
         #endregion
 
         #region DATA
-
-        // TODO
+        
+        // TODO open file dialog to select save name
         internal static void SaveFile(string fileName)
         {
             Stop();
             try
             {
-                // TODO open file dialog to select save name
                 // sequence.SaveAsync(fileName);
             }
             catch (Exception ex)
             {
-                vue.ErrorMessage(ex.Message);
+                Vue.ErrorMessage(ex.Message);
             }
             // on success
-            vue.DisableUserInterractions();
+            Vue.DisableUserInterractions();
         }
 
         internal static void OpenFile(string fileName)
@@ -281,34 +297,34 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                vue.ErrorMessage(ex.Message);
+                Vue.ErrorMessage(ex.Message);
             }
             // on success
-            vue.DisableUserInterractions();
+            Vue.DisableUserInterractions();
         }
 
         public static void HandleLoadProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            vue.ProgressionBar.Value = e.ProgressPercentage;
+            Vue.ProgressionBar.Value = e.ProgressPercentage;
         }
 
         public static void HandleLoadCompleted(object sender, AsyncCompletedEventArgs e)
         {
 
-            vue.EnableUserInterractions();
+            Vue.EnableUserInterractions();
 
-            vue.ProgressionBar.Value = 0;
+            Vue.ProgressionBar.Value = 0;
             if (e.Error == null)
             {
-                vue.TimeScroller.Value = 0;
-                vue.TimeScroller.Maximum = MidiManager.sequence.GetLength();
+                Vue.TimeScroller.Value = 0;
+                Vue.TimeScroller.Maximum = MidiManager.sequence.GetLength();
             }
             else
             {
                 System.Windows.MessageBox.Show(e.Error.Message);
             }
-            //e.model.Tempo = MidiManager.sequencer.clock.Tempo;
-            vue.ctrl.InitTracks();
+            Vue.Model.Tempo = MidiManager.sequencer.clock.Tempo; // TODO tempo doesnt seem to be loaded from midi file that easy
+            Vue.Ctrl.InitTracks(); 
         }
 
         #endregion

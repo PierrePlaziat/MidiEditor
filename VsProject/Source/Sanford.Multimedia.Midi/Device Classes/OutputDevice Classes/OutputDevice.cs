@@ -45,253 +45,253 @@ namespace Sanford.Multimedia.Midi
 	/// </summary>
 	public sealed class OutputDevice : OutputDeviceBase
 	{
-        #region Win32 Midi Output Functions and Constants
+		#region Win32 Midi Output Functions and Constants
 
-        [DllImport("winmm.dll")]
-        private static extern int midiOutOpen(out IntPtr handle, int deviceID,
-            MidiOutProc proc, IntPtr instance, int flags);
+		[DllImport("winmm.dll")]
+		private static extern int midiOutOpen(out IntPtr handle, int deviceID,
+			MidiOutProc proc, IntPtr instance, int flags);
 
-        [DllImport("winmm.dll")]
-        private static extern int midiOutClose(IntPtr handle);
+		[DllImport("winmm.dll")]
+		private static extern int midiOutClose(IntPtr handle);
 
-        #endregion 
+		#endregion 
 
-        private MidiOutProc midiOutProc;
+		private MidiOutProc midiOutProc;
 
-        private bool runningStatusEnabled = false;
+		private bool runningStatusEnabled = false;
 
-        private int runningStatus = 0;        
+		private int runningStatus = 0;        
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the OutputDevice class.
-        /// </summary>
-        public OutputDevice(int deviceID) : base(deviceID)
-        {
-            midiOutProc = HandleMessage;
+		/// <summary>
+		/// Initializes a new instance of the OutputDevice class.
+		/// </summary>
+		public OutputDevice(int deviceID) : base(deviceID)
+		{
+			midiOutProc = HandleMessage;
 
-            int result = midiOutOpen(out handle, deviceID, midiOutProc, IntPtr.Zero, CALLBACK_FUNCTION);
+			int result = midiOutOpen(out handle, deviceID, midiOutProc, IntPtr.Zero, CALLBACK_FUNCTION);
 
-            if(result != MidiDeviceException.MMSYSERR_NOERROR)
-            {
-                throw new OutputDeviceException(result);
-            }
-        }
+			if(result != MidiDeviceException.MMSYSERR_NOERROR)
+			{
+				throw new OutputDeviceException(result);
+			}
+		}
 
-        #endregion     
+		#endregion     
    
-        protected override void Dispose(bool disposing)
-        {
-            if(disposing)
-            {
-                lock(lockObject)
-                {
-                    Reset();
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				lock(lockObject)
+				{
+					Reset();
 
-                    // Close the OutputDevice.
-                    int result = midiOutClose(Handle);
+					// Close the OutputDevice.
+					int result = midiOutClose(Handle);
 
-                    if(result != MidiDeviceException.MMSYSERR_NOERROR)
-                    {
-                        // Throw an exception.
-                        throw new OutputDeviceException(result);
-                    }
-                }
-            }
-            else
-            {
-                midiOutReset(Handle);
-                midiOutClose(Handle);
-            }
+					if(result != MidiDeviceException.MMSYSERR_NOERROR)
+					{
+						// Throw an exception.
+						throw new OutputDeviceException(result);
+					}
+				}
+			}
+			else
+			{
+				midiOutReset(Handle);
+				midiOutClose(Handle);
+			}
 
-            base.Dispose(disposing);
-        }
+			base.Dispose(disposing);
+		}
 
-        /// <summary>
-        /// Closes the OutputDevice.
-        /// </summary>
-        /// <exception cref="OutputDeviceException">
-        /// If an error occurred while closing the OutputDevice.
-        /// </exception>
-        public override void Close()
-        {
-            #region Guard
+		/// <summary>
+		/// Closes the OutputDevice.
+		/// </summary>
+		/// <exception cref="OutputDeviceException">
+		/// If an error occurred while closing the OutputDevice.
+		/// </exception>
+		public override void Close()
+		{
+			#region Guard
 
-            if(IsDisposed)
-            {
-                return;
-            }
+			if(IsDisposed)
+			{
+				return;
+			}
 
-            #endregion
+			#endregion
 
-            Dispose(true);            
-        }
+			Dispose(true);            
+		}
 
-        /// <summary>
-        /// Resets the OutputDevice.
-        /// </summary>
-        public override void Reset()
-        {
-            #region Require
+		/// <summary>
+		/// Resets the OutputDevice.
+		/// </summary>
+		public override void Reset()
+		{
+			#region Require
 
-            if(IsDisposed)
-            {
-                throw new ObjectDisposedException(this.GetType().Name);
-            }
+			if(IsDisposed)
+			{
+				throw new ObjectDisposedException(this.GetType().Name);
+			}
 
-            #endregion
+			#endregion
 
-            runningStatus = 0;
+			runningStatus = 0;
 
-            base.Reset();
-        }
+			base.Reset();
+		}
 
-        public override void Send(ChannelMessage message)
-        {
-            #region Require
+		public override void Send(ChannelMessage message)
+		{
+			#region Require
 
-            if(IsDisposed)
-            {
-                throw new ObjectDisposedException(this.GetType().Name);
-            }
+			if(IsDisposed)
+			{
+				throw new ObjectDisposedException(this.GetType().Name);
+			}
 
-            #endregion
+			#endregion
 
-            lock(lockObject)
-            {
-                // If running status is enabled.
-                if(runningStatusEnabled)
-                {
-                    // If the message's status value matches the running status.
-                    if(message.Status == runningStatus)
-                    {
-                        // Send only the two data bytes without the status byte.
-                        Send(message.Message >> 8);
-                    }
-                    // Else the message's status value does not match the running
-                    // status.
-                    else
-                    {
-                        // Send complete message with status byte.
-                        Send(message.Message);
+			lock(lockObject)
+			{
+				// If running status is enabled.
+				if(runningStatusEnabled)
+				{
+					// If the message's status value matches the running status.
+					if(message.Status == runningStatus)
+					{
+						// Send only the two data bytes without the status byte.
+						Send(message.Message >> 8);
+					}
+					// Else the message's status value does not match the running
+					// status.
+					else
+					{
+						// Send complete message with status byte.
+						Send(message.Message);
 
-                        // Update running status.
-                        runningStatus = message.Status;
-                    }
-                }
-                // Else running status has not been enabled.
-                else
-                {
-                    Send(message.Message);
-                }
-            }
-        }
+						// Update running status.
+						runningStatus = message.Status;
+					}
+				}
+				// Else running status has not been enabled.
+				else
+				{
+					Send(message.Message);
+				}
+			}
+		}
 
-        public override void Send(SysExMessage message)
-        {
-            // System exclusive cancels running status.
-            runningStatus = 0;
+		public override void Send(SysExMessage message)
+		{
+			// System exclusive cancels running status.
+			runningStatus = 0;
 
-            base.Send(message);
-        }
+			base.Send(message);
+		}
 
-        public override void Send(SysCommonMessage message)
-        {
-            #region Require
+		public override void Send(SysCommonMessage message)
+		{
+			#region Require
 
-            if(IsDisposed)
-            {
-                throw new ObjectDisposedException(this.GetType().Name);
-            }
+			if(IsDisposed)
+			{
+				throw new ObjectDisposedException(this.GetType().Name);
+			}
 
-            #endregion
+			#endregion
 
-            // System common cancels running status.
-            runningStatus = 0;
+			// System common cancels running status.
+			runningStatus = 0;
 
-            base.Send(message);
-        }
+			base.Send(message);
+		}
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the OutputDevice uses
-        /// a running status.
-        /// </summary>
-        public bool RunningStatusEnabled
-        {
-            get
-            {
-                return runningStatusEnabled;
-            }
-            set
-            {
-                runningStatusEnabled = value;
+		/// <summary>
+		/// Gets or sets a value indicating whether the OutputDevice uses
+		/// a running status.
+		/// </summary>
+		public bool RunningStatusEnabled
+		{
+			get
+			{
+				return runningStatusEnabled;
+			}
+			set
+			{
+				runningStatusEnabled = value;
 
-                // Reset running status.
-                runningStatus = 0;
-            }
-        }
-        
-        #endregion
-    }
+				// Reset running status.
+				runningStatus = 0;
+			}
+		}
+		
+		#endregion
+	}
 
-    /// <summary>
-    /// The exception that is thrown when a error occurs with the OutputDevice
-    /// class.
-    /// </summary>
-    public class OutputDeviceException : MidiDeviceException
-    {
-        #region OutputDeviceException Members
+	/// <summary>
+	/// The exception that is thrown when a error occurs with the OutputDevice
+	/// class.
+	/// </summary>
+	public class OutputDeviceException : MidiDeviceException
+	{
+		#region OutputDeviceException Members
 
-        #region Win32 Midi Output Error Function
+		#region Win32 Midi Output Error Function
 
-        [DllImport("winmm.dll", CharSet = CharSet.Unicode)]
-        private static extern int midiOutGetErrorText(int errCode, 
-            StringBuilder message, int sizeOfMessage);
+		[DllImport("winmm.dll", CharSet = CharSet.Unicode)]
+		private static extern int midiOutGetErrorText(int errCode, 
+			StringBuilder message, int sizeOfMessage);
 
-        #endregion
+		#endregion
 
-        #region Fields
+		#region Fields
 
-        // The error message.
-        private StringBuilder message = new StringBuilder(128);        
+		// The error message.
+		private StringBuilder message = new StringBuilder(128);        
 
-        #endregion
+		#endregion
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the OutputDeviceException class with
-        /// the specified error code.
-        /// </summary>
-        /// <param name="errCode">
-        /// The error code.
-        /// </param>
-        public OutputDeviceException(int errCode) : base(errCode)
-        {
-            // Get error message.
-            midiOutGetErrorText(errCode, message, message.Capacity);
-        }
+		/// <summary>
+		/// Initializes a new instance of the OutputDeviceException class with
+		/// the specified error code.
+		/// </summary>
+		/// <param name="errCode">
+		/// The error code.
+		/// </param>
+		public OutputDeviceException(int errCode) : base(errCode)
+		{
+			// Get error message.
+			midiOutGetErrorText(errCode, message, message.Capacity);
+		}
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets a message that describes the current exception.
-        /// </summary>
-        public override string Message
-        {
-            get
-            {
-                return message.ToString();
-            }
-        }        
+		/// <summary>
+		/// Gets a message that describes the current exception.
+		/// </summary>
+		public override string Message
+		{
+			get
+			{
+				return message.ToString();
+			}
+		}        
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

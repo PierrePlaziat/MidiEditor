@@ -44,10 +44,6 @@ namespace Sanford.Multimedia.Midi
     /// </summary>
     public sealed partial class Track
     {
-        /// Track name, default : "Track"
-        public string Name { get; set; } = "Track";
-        public Color color{ get; set; } = Color.Black;
-        public int id = 0;
 
         #region Track Members
 

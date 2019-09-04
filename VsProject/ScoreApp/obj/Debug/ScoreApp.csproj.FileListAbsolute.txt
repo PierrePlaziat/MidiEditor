@@ -75,14 +75,10 @@ D:\GIT\MidiEditor\VsProject\ScoreApp\bin\Debug\Sanford.Multimedia.Midi.pdb
 D:\GIT\MidiEditor\VsProject\ScoreApp\bin\Debug\Sanford.Multimedia.Midi.xml
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.csprojAssemblyReference.cache
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\MainWindow.g.cs
-D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\Vue.g.cs
-D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\TrackLine\Midi\MidiLineView.g.cs
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\App.g.cs
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp_MarkupCompile.cache
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp_MarkupCompile.lref
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\MainWindow.baml
-D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\Vue.baml
-D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\TrackLine\Midi\MidiLineView.baml
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.g.resources
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.Properties.Resources.resources
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.csproj.GenerateResource.cache
@@ -92,3 +88,7 @@ D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.exe
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\ScoreApp.pdb
 D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\GeneratedInternalTypeHelper.g.cs
 D:\Projects\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\Main\Vue.g.cs
+D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\Main\TrackLine\Midi\MidiLineView.g.cs
+D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\Main\Vue.baml
+D:\GIT\MidiEditor\VsProject\ScoreApp\obj\Debug\UI\Main\TrackLine\Midi\MidiLineView.baml
