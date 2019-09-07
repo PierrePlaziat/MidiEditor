@@ -121,10 +121,15 @@ namespace ScoreApp
             }
         }
 
+        internal static void ChangeInstrument(Track track, string text)
+        {
+            // TODO
+        }
+
         #endregion
 
         #region MIDI
-        
+
         private static void HandleChannelMessagePlayed(object sender, ChannelMessageEventArgs e)
         {
             if (Vue.Model.Closing)

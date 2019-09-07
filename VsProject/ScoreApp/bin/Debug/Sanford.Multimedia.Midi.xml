@@ -2538,6 +2538,14 @@
             The index into the Track at which to remove the MidiEvent.
             </param>
         </member>
+        <member name="M:Sanford.Multimedia.Midi.Track.Remove(Sanford.Multimedia.Midi.MidiEvent)">
+            <summary>
+            Removes the MidiEvent at the specified index.
+            </summary>
+            <param name="index">
+            The index into the Track at which to remove the MidiEvent.
+            </param>
+        </member>
         <member name="M:Sanford.Multimedia.Midi.Track.GetMidiEvent(System.Int32)">
             <summary>
             Gets the MidiEvent at the specified index.

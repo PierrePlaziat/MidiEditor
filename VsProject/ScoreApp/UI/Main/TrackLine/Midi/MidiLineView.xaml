@@ -1,4 +1,4 @@
-﻿<Page x:Class="ScoreApp.TrackLine.MvcMidi.MidiLineView"
+﻿ <Page x:Class="ScoreApp.TrackLine.MvcMidi.MidiLineView"
 	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -71,6 +71,14 @@
 					</Canvas>
 				</DockPanel>
 			</ScrollViewer>
+            <ComboBox 
+                Name="ComboInstruments" 
+                HorizontalAlignment="Left" 
+                Margin="18,67,0,0" 
+                VerticalAlignment="Top" 
+                Width="154" 
+                SelectionChanged="ComboBox_SelectionChanged">
+            </ComboBox>
 
 
 
@@ -78,7 +86,7 @@
 
 
 
-		</Grid>
+        </Grid>
 
 	</Border>
 </Page>

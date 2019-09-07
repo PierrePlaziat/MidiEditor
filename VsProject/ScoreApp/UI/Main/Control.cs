@@ -73,6 +73,7 @@ namespace ScoreApp.MVC
         {
             int newScrollValue = (int) vue.TimeScroller.Value;
             MidiManager.Time = newScrollValue;
+            vue.Update();
         }
 
         #endregion
@@ -119,11 +120,13 @@ namespace ScoreApp.MVC
 
         internal void ZoomTracksX(int delta)
         {
+            if (MidiManager.IsPlaying) return;
             model.XZoom += (float)delta/10;
         }
 
         internal void ZoomTracksY(int delta)
         {
+            if (MidiManager.IsPlaying) return;
             model.YZoom += (float)delta /10;
         }
 

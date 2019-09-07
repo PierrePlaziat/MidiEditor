@@ -99,6 +99,11 @@ namespace ScoreApp.TrackLine.MvcMidi
             Model.Track.SetColor(color);
             Model.TColor = new SolidColorBrush(color); 
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MidiManager.ChangeInstrument(Model.Track, ComboInstruments.Text);
+        }
     }
 
 }

@@ -32,3 +32,15 @@ D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csproj.Gene
 D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csproj.CoreCompileInputs.cache
 D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.dll
 D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.pdb
+D:\Projects\GIT\MidiEditor\VsProject\Source\bin\Debug\Sanford.Multimedia.Midi.XML
+D:\Projects\GIT\MidiEditor\VsProject\Source\bin\Debug\Sanford.Multimedia.Midi.dll
+D:\Projects\GIT\MidiEditor\VsProject\Source\bin\Debug\Sanford.Multimedia.Midi.pdb
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csprojAssemblyReference.cache
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.UI.DeviceDialog.resources
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.UI.InputDeviceDialog.resources
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.UI.OutputDeviceDialog.resources
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.UI.PianoControlDialog.resources
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csproj.GenerateResource.cache
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csproj.CoreCompileInputs.cache
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.dll
+D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.pdb

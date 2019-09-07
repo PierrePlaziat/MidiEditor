@@ -293,11 +293,11 @@ namespace Sanford.Multimedia.Midi
         {
             #region Require
 
-            if(index < 0)
+            if (index < 0)
             {
                 throw new ArgumentOutOfRangeException("index", index, "Track index out of range.");
             }
-            else if(index == Count - 1)
+            else if (index == Count - 1)
             {
                 throw new ArgumentException("Cannot remove the end of track event.", "index");
             }
@@ -306,7 +306,7 @@ namespace Sanford.Multimedia.Midi
 
             MidiEvent current = GetMidiEvent(index);
 
-            if(current.Previous != null)
+            if (current.Previous != null)
             {
                 current.Previous.Next = current.Next;
             }
@@ -317,7 +317,52 @@ namespace Sanford.Multimedia.Midi
                 head = head.Next;
             }
 
-            if(current.Next != null)
+            if (current.Next != null)
+            {
+                current.Next.Previous = current.Previous;
+            }
+            else
+            {
+                Debug.Assert(current == tail);
+
+                tail = tail.Previous;
+
+                endOfTrackMidiEvent.SetAbsoluteTicks(Length);
+                endOfTrackMidiEvent.Previous = tail;
+            }
+
+            current.Next = current.Previous = null;
+
+            count--;
+
+            #region Invariant
+
+            AssertValid();
+
+            #endregion
+        }
+
+        /// <summary>
+        /// Removes the MidiEvent at the specified index.
+        /// </summary>
+        /// <param name="index">
+        /// The index into the Track at which to remove the MidiEvent.
+        /// </param>
+        public void Remove(MidiEvent current)
+        {
+
+            if (current.Previous != null)
+            {
+                current.Previous.Next = current.Next;
+            }
+            else
+            {
+                Debug.Assert(current == head);
+
+                head = head.Next;
+            }
+
+            if (current.Next != null)
             {
                 current.Next.Previous = current.Previous;
             }

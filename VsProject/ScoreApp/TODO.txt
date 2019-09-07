@@ -1,12 +1,52 @@
-﻿Important
-	BUG Tempo wont change
-	TODO Grid move as track advances
-	TODO Notes mouse interractions
-	THEN MidiInstrument gestion
-	
-Not Important
-	TODO Track Name
-	TODO Track Color
-
-THEN
-	save gestion
+﻿
+			DEBUG
+				Note shouldnt plot on track focus
+				Short notes seem to skip noteoff
+				Scroll single click wont work
+				move bar on scroll
+			TODO 
+				Better Scroll visualizations
+				Grid move as track advance
+				CellLight On Click, use drag for move
+				Auto move on play
+				MidiInstrument gestion
+				Expand Lines
+					GridSeparators/buttonForHeigth
+				Track Name as midi Msg
+				Playback on plot function
+			THEN
+				save gestion
+				visualization tools
+				Wave generator
+				configuration window
+					INputs
+					OUTputs
+					UI
+					MidiFonts
+				Panel
+					Piano
+					Guitar
+					TrackSelected
+					MidiWatch
+					Visualizer
+					Generator
+				Clips
+			STUDY
+				Ableton
+				LineTypes Architecture
+			ADD
+				Lines	
+					scroll on maj+molette
+					Zoom
+						X ctrl+molette
+						Y alt+molette
+					Header
+						Expand Line
+						Change Color
+			LATER
+				Externalize piano to flying window
+				Integrate
+					AngularScore
+					ScaleGen
+					WaveGen
+				File/ New and Save support

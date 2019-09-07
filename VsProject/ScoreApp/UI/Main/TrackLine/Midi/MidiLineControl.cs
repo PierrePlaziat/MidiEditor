@@ -61,6 +61,7 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         internal void InsertNote(double start, double end, int noteIndex)
         {
+            if (MidiManager.IsPlaying) return;
             int channel = 0; int intensity = 100;
             // Generate Midi Note
             Tuple<MidiEvent, MidiEvent> msgs = MidiManager.CreateNote(channel, noteIndex, Model.Track,start,end,intensity);
@@ -223,13 +224,14 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         private void NoteRightDown(object sender, MouseButtonEventArgs e)
         {
+            if (MidiManager.IsPlaying) return;
             Rectangle rec = (Rectangle)sender;
             MidiEvent noteOn = (MidiEvent)rec.GetValue(AttachedNoteOnProperty);
             MidiEvent noteOff = (MidiEvent)rec.GetValue(AttachedNoteOffProperty);
             View.TrackBody.Children.Remove(rec);
             // TODO delete midi event   
-            Model.Track.RemoveAt(noteOn.AbsoluteTicks);
-            Model.Track.RemoveAt(noteOff.AbsoluteTicks);
+            Model.Track.Remove(noteOn);
+            Model.Track.Remove(noteOff);
         }
 
         #endregion
