@@ -5,16 +5,18 @@ using System.Windows.Media;
 using TrackExtensions;
 using ScoreApp.Utils;
 using System.Configuration;
+using System.Windows;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
     public class MidiLineModel : HandleBinding
     {
 
-        public MidiLineControl Ctrl { get; set; }
 
         #region CTOR
 
+        public MidiLineControl Ctrl { get; set; }
+        public Track Track { get; }
 
         public MidiLineModel(Track track)
         {
@@ -26,6 +28,13 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         #endregion
 
+
+        public readonly Thickness SelectedBorderThickness = new Thickness(.5f);
+        public readonly Thickness UnselectedBorderThickness = new Thickness(0);
+        public Point mouseDragStartPoint;
+        public Point mouseDragEndPoint;
+        public bool isDragging = false;
+
         #region ATRB
 
         private SolidColorBrush tColor;
@@ -35,7 +44,6 @@ namespace ScoreApp.TrackLine.MvcMidi
             set { tColor = value; RaisePropertyChanged("TColor"); }
         }
 
-        public Track Track { get; }
         public int MidiInstrument { get; internal set; }
 
         public Dictionary<int, Tuple<int, MidiEvent>> LastNotesOn { get; set; }
@@ -47,7 +55,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             get
             {
-                return (MidiManager.Vue.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"]));
+                return (MidiManager.attachedView.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"]));
             }
             set
             {
@@ -62,7 +70,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             get
             {
-                return (MidiManager.Vue.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]));
+                return (MidiManager.attachedView.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]));
             }
             set
             {

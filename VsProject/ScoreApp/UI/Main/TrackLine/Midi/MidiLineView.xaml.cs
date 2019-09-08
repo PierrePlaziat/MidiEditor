@@ -18,10 +18,6 @@ namespace ScoreApp.TrackLine.MvcMidi
         public MidiLineControl Ctrl { get; set; }
         public MidiLineModel Model { get; set; }
 
-        readonly double notesQuantity = double.Parse(ConfigurationManager.AppSettings["notesQuantity"]);
-        readonly Thickness SelectedBorderThickness = new Thickness(.5f);
-        readonly Thickness UnselectedBorderThickness = new Thickness(0);
-
         public MidiLineView(Track track)
         {
             Model = new MidiLineModel(track);
@@ -30,13 +26,8 @@ namespace ScoreApp.TrackLine.MvcMidi
             Ctrl = new MidiLineControl(Model,this);
             Model.Ctrl = Ctrl;
             Loaded += MyWindow_Loaded;
-            TrackBody.MouseWheel += MouseWheeled;
-            TrackHeader.MouseWheel += MouseWheeled;
-        }
-
-        private void MouseWheeled(object sender, MouseWheelEventArgs e)
-        {
-            MidiManager.Vue.MouseWheeled(sender, e);
+            TrackBody.MouseWheel += MouseWheel;
+            //TrackHeader.MouseWheel += MouseWheeled;
         }
 
         private void MyWindow_Loaded(object sender, RoutedEventArgs e)
@@ -61,33 +52,39 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         #endregion
 
-        #region PLOT GESTION
-
-        Point mouseDragStartPoint;
-        Point mouseDragEndPoint;
-        bool draggingNoteOnStave = false;
-
+        #region MOUSE GESTION
+        // TODO better plot (ableton style)
+        
         private void TrackBody_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            mouseDragStartPoint =  e.GetPosition((Canvas)sender);
-            draggingNoteOnStave = true;
+            Model.mouseDragStartPoint =  e.GetPosition((Canvas)sender);
+            Model.isDragging = true;
         }
 
         private void TrackBody_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (draggingNoteOnStave)
+            if (Model.isDragging)
             {
-                draggingNoteOnStave = false;
-                mouseDragEndPoint = e.GetPosition((Canvas)sender);
-                double start = mouseDragStartPoint.X/ Model.CellWidth;
-                double end = mouseDragEndPoint.X / Model.CellWidth;
-                int noteIndex = (int)notesQuantity - (int)(mouseDragStartPoint.Y/Model.CellHeigth);
+
+                Model.isDragging = false;
+                Model.mouseDragEndPoint = e.GetPosition((Canvas)sender);
+                double start = Model.mouseDragStartPoint.X/ Model.CellWidth;
+                double end = Model.mouseDragEndPoint.X / Model.CellWidth;
+                int noteIndex = 127 - (int)(Model.mouseDragStartPoint.Y/Model.CellHeigth);
                 Ctrl.InsertNote(start,end,noteIndex);
             }
         }
 
+        private void MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            MidiManager.attachedView.HandleWheel(sender, e);
+        }
+
         #endregion
 
+        #region HEADER
+
+        // TODO color picker
         private void TrackColor_Click(object sender, RoutedEventArgs e)
         {
             Random rnd = new Random();
@@ -100,10 +97,14 @@ namespace ScoreApp.TrackLine.MvcMidi
             Model.TColor = new SolidColorBrush(color); 
         }
 
+        // TODO midi instrument selection
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MidiManager.ChangeInstrument(Model.Track, ComboInstruments.Text);
         }
+
+        #endregion
+
     }
 
 }

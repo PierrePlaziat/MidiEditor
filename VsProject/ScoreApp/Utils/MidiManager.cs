@@ -59,11 +59,11 @@ namespace ScoreApp
         
         #region CTOR
 
-        public static Vue Vue { get; set; }
+        public static Vue attachedView { get; set; }
 
         public static void Init(Vue vue)
         {
-            Vue = vue;
+            attachedView = vue;
             InitSequencer();
             if (CheckMidiOutput())
                 InitOutputDevice();
@@ -73,7 +73,7 @@ namespace ScoreApp
         {
             if (OutputDevice.DeviceCount == 0)
             {
-                Vue.ErrorMessage("No MIDI output devices available.");
+                attachedView.ErrorMessage("No MIDI output devices available.");
                 Unload();
                 return false;
             }
@@ -90,7 +90,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                Vue.ErrorMessage(ex.Message);
+                attachedView.ErrorMessage(ex.Message);
                 Unload();
             }
         }
@@ -128,17 +128,17 @@ namespace ScoreApp
 
         #endregion
 
-        #region MIDI
+        #region MIDI MSG
 
         private static void HandleChannelMessagePlayed(object sender, ChannelMessageEventArgs e)
         {
-            if (Vue.Model.Closing)
+            if (attachedView.Model.Closing)
             {
                 return;
             }
 
             MidiManager.outDevice.Send(e.Message);
-            Vue.Piano.Send(e.Message);
+            attachedView.Piano.Send(e.Message);
         }
 
         private static void HandleChased(object sender, ChasedEventArgs e)
@@ -159,7 +159,7 @@ namespace ScoreApp
             foreach (ChannelMessage message in e.Messages)
             {
                 MidiManager.outDevice.Send(message);
-                Vue.Piano.Send(message);
+                attachedView.Piano.Send(message);
             }
         }
 
@@ -184,7 +184,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                Vue.ErrorMessage(ex.Message);
+                attachedView.ErrorMessage(ex.Message);
             }
         }
 
@@ -198,7 +198,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                Vue.ErrorMessage(ex.Message);
+                attachedView.ErrorMessage(ex.Message);
             }
         }
 
@@ -212,7 +212,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                Vue.ErrorMessage(ex.Message);
+                attachedView.ErrorMessage(ex.Message);
             }
         }
 
@@ -284,10 +284,10 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                Vue.ErrorMessage(ex.Message);
+                attachedView.ErrorMessage(ex.Message);
             }
             // on success
-            Vue.DisableUserInterractions();
+            attachedView.DisableUserInterractions();
         }
 
         internal static void OpenFile(string fileName)
@@ -300,34 +300,34 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                Vue.ErrorMessage(ex.Message);
+                attachedView.ErrorMessage(ex.Message);
             }
             // on success
-            Vue.DisableUserInterractions();
+            attachedView.DisableUserInterractions();
         }
 
         public static void HandleLoadProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            Vue.ProgressionBar.Value = e.ProgressPercentage;
+            attachedView.ProgressionBar.Value = e.ProgressPercentage;
         }
 
         public static void HandleLoadCompleted(object sender, AsyncCompletedEventArgs e)
         {
 
-            Vue.EnableUserInterractions();
+            attachedView.EnableUserInterractions();
 
-            Vue.ProgressionBar.Value = 0;
+            attachedView.ProgressionBar.Value = 0;
             if (e.Error == null)
             {
-                Vue.TimeScroller.Value = 0;
-                Vue.TimeScroller.Maximum = MidiManager.sequence.GetLength();
+                attachedView.TimeScroller.Value = 0;
+                attachedView.TimeScroller.Maximum = MidiManager.sequence.GetLength();
             }
             else
             {
                 System.Windows.MessageBox.Show(e.Error.Message);
             }
-            Vue.Model.Tempo = MidiManager.sequencer.clock.Tempo; // TODO tempo doesnt seem to be loaded from midi file that easy
-            Vue.Ctrl.InitTracks(); 
+            attachedView.Model.Tempo = MidiManager.sequencer.clock.Tempo; // TODO tempo doesnt seem to be loaded from midi file that easy
+            attachedView.Ctrl.InitTracks(); 
         }
 
         #endregion

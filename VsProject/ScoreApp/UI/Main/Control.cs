@@ -4,6 +4,7 @@ using System;
 using System.Windows.Media;
 using System.Windows.Controls;
 using TrackExtensions;
+using System.Media;
 
 namespace ScoreApp.MVC
 {
@@ -31,7 +32,7 @@ namespace ScoreApp.MVC
         public void InitVue()
         {
             vue.TracksPanel.Background = Brushes.Transparent;
-            vue.TracksPanel.MouseWheel += vue.MouseWheeled;
+            vue.TracksPanel.MouseWheel += vue.HandleWheel;
             vue.Title = model.ProjectName;
             vue.TimeScroller.Scroll += new System.Windows.Controls.Primitives.ScrollEventHandler(ManualScroll);
         }
@@ -68,6 +69,7 @@ namespace ScoreApp.MVC
         {
             vue.Update();
         }
+        
 
         internal void ManualScroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
         {

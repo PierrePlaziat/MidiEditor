@@ -13,7 +13,7 @@ namespace ScoreApp
         public App()
         {
             MidiManager.Init(new MVC.Vue());
-            MidiManager.Vue.Initialize();
+            MidiManager.attachedView.Initialize();
         }
 
     }

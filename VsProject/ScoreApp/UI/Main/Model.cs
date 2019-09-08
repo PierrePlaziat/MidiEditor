@@ -18,6 +18,13 @@ namespace ScoreApp.MVC
 
         #endregion
 
+        #region config 
+
+        public int timeWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"]);
+        public double midiResolution = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"]);
+
+        #endregion
+
         #region State
 
         public int SelectedTrack { get; set; } = 0;

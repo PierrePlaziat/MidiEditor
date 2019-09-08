@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
 using Sanford.Multimedia.Midi.UI;
 
 namespace ScoreApp.MVC
@@ -16,8 +14,6 @@ namespace ScoreApp.MVC
 
         #region ATRB
 
-        readonly int timeWidth = int.Parse(ConfigurationManager.AppSettings["cellWidth"]);
-        readonly double midiResolution = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"]);
         const int notationOffset = 15;
 
         #endregion
@@ -50,7 +46,7 @@ namespace ScoreApp.MVC
 
         #endregion
 
-        public void MouseWheeled(object sender, MouseWheelEventArgs e)
+        public void HandleWheel(object sender, MouseWheelEventArgs e)
         {
             int value = e.Delta / 120;
             if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
@@ -109,7 +105,7 @@ namespace ScoreApp.MVC
 
         public void Update()
         {
-            double timePosition = MidiManager.Time * timeWidth / midiResolution;
+            double timePosition = MidiManager.Time * Model.timeWidth / Model.midiResolution;
             TimeScroller.Value = Math.Min(MidiManager.Time, TimeScroller.Maximum);
             TimeBar.SetValue(Canvas.LeftProperty, timePosition + notationOffset - Model.XOffset);
         }

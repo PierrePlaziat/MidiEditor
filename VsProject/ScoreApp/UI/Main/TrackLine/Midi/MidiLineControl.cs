@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Configuration;
 using System.Windows.Input;
 using TrackExtensions;
 
@@ -62,9 +61,15 @@ namespace ScoreApp.TrackLine.MvcMidi
         internal void InsertNote(double start, double end, int noteIndex)
         {
             if (MidiManager.IsPlaying) return;
-            int channel = 0; int intensity = 100;
             // Generate Midi Note
-            Tuple<MidiEvent, MidiEvent> msgs = MidiManager.CreateNote(channel, noteIndex, Model.Track,start,end,intensity);
+            int channel = 0; int intensity = 100;
+            var msgs = MidiManager.CreateNote(
+                channel, 
+                noteIndex,
+                Model.Track,
+                start,
+                end,
+                intensity);
             // Draw it on MidiRoll
             DrawNote(start,end,noteIndex, msgs.Item1, msgs.Item2);
         }
