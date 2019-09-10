@@ -50,7 +50,7 @@ namespace ScoreApp.MVC
             get { return xOffset; }
             set
             {
-                if (value < 0) value = 0;
+                //if (value < 0) value = 0;
                 xOffset = value;
                 RaisePropertyChanged("XOffset");
                 foreach(Frame track in TracksPanel.Children)

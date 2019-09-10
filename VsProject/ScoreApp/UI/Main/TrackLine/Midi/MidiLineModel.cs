@@ -91,6 +91,7 @@ namespace ScoreApp.TrackLine.MvcMidi
             set
             {
                 xOffset = value;
+                //Console.WriteLine(":" + XOffset);
                 Ctrl.View.TrackBody.Margin = new Thickness(-XOffset,0,0,0);
             }
         }

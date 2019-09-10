@@ -113,7 +113,7 @@ namespace ScoreApp.MVC
             }
 
             // right to left slide
-            else if (relativeTimePosition > width - margin)
+            else if (relativeTimePosition < margin)
             {
                 double delta = relativeTimePosition - width - margin;
                 Model.XOffset += delta;
@@ -121,7 +121,7 @@ namespace ScoreApp.MVC
             }
 
             // left to right slide
-            else if (relativeTimePosition < margin)
+            else if (relativeTimePosition > width - margin)
             {
                 double delta = margin - relativeTimePosition;
                 Model.XOffset -= delta;
