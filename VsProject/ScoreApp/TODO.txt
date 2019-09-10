@@ -1,52 +1,21 @@
-﻿
-			DEBUG
-				Note shouldnt plot on track focus
-				Short notes seem to skip noteoff
-				Scroll single click wont work
-				move bar on scroll
+﻿			DEBUG
+				pause on track end reach
+				Grid Slide
+				(manual scroll always get 0)
 			TODO 
-				Better Scroll visualizations
-				Grid move as track advance
-				CellLight On Click, use drag for move
-				Auto move on play
-				MidiInstrument gestion
-				Expand Lines
-					GridSeparators/buttonForHeigth
-				Track Name as midi Msg
-				Playback on plot function
+				UiManager
+					Config
+					State
+					Input
+						scroll on maj+molette
+				Note input rework
+					DoubleClick
+						Cell OnOff
+					drag
+						empty selection rectangle
+						center: move note
+						border: alter note time
+					+/-
+						plot time length 	
+
 			THEN
-				save gestion
-				visualization tools
-				Wave generator
-				configuration window
-					INputs
-					OUTputs
-					UI
-					MidiFonts
-				Panel
-					Piano
-					Guitar
-					TrackSelected
-					MidiWatch
-					Visualizer
-					Generator
-				Clips
-			STUDY
-				Ableton
-				LineTypes Architecture
-			ADD
-				Lines	
-					scroll on maj+molette
-					Zoom
-						X ctrl+molette
-						Y alt+molette
-					Header
-						Expand Line
-						Change Color
-			LATER
-				Externalize piano to flying window
-				Integrate
-					AngularScore
-					ScaleGen
-					WaveGen
-				File/ New and Save support
