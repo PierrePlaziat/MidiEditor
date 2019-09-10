@@ -89,45 +89,53 @@ namespace ScoreApp.MVC
             // Guard
             //if (Model.TracksPanel.Children.Count > 0) return;
             Model.absoluteTimePosition = MidiManager.Time * Model.timeWidth / Model.midiResolution + Model.touchOffset;
-            Model.relativeTimePosition = HandleXOffset();
+            Model.relativeTimePosition = HandleTrackSlide();
             HandleTimeScroller();
             HandleTimeBar();
         }
 
         #region Private
 
-        // remember to XOffset the track
-
-        // TODO
-        private double HandleXOffset()
+        // TODO debug
+        private double HandleTrackSlide()
         {
-            double width = ((Frame)Model.TracksPanel.Children[0]).ActualWidth-Model.Headerwidth;
+            double width = ((Frame)Model.TracksPanel.Children[0]).ActualWidth - Model.Headerwidth - Model.touchOffset;
             double margin = width * Model.marginPercent;
             double relativeTimePosition = Model.absoluteTimePosition - Model.XOffset;
+
             #region Slide
+
             // left blocked
-            if (Model.absoluteTimePosition < Model.touchOffset - margin) return relativeTimePosition;
-            // right slide
-            if (relativeTimePosition > width - margin)
+            if (Model.absoluteTimePosition < margin)
+            {
+                Model.XOffset = 0;
+                return Model.absoluteTimePosition;
+            }
+
+            // right to left slide
+            else if (relativeTimePosition > width - margin)
             {
                 double delta = relativeTimePosition - width - margin;
                 Model.XOffset += delta;
                 relativeTimePosition = width - margin;
             }
-            // left slide
-            if (relativeTimePosition < Model.touchOffset + margin)
+
+            // left to right slide
+            else if (relativeTimePosition < margin)
             {
-                double delta = (Model.touchOffset + margin) - relativeTimePosition;
+                double delta = margin - relativeTimePosition;
                 Model.XOffset -= delta;
-                relativeTimePosition = Model.touchOffset + margin;
+                relativeTimePosition =  margin;
             }
+
             #endregion
+
             return relativeTimePosition;
         }
 
         private void HandleTimeBar()
         {
-            TimeBar.SetValue(Canvas.LeftProperty, Model.relativeTimePosition);
+            TimeBar.SetValue(Canvas.LeftProperty, Model.relativeTimePosition );
         }
 
         // TODO
