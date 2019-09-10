@@ -44,3 +44,4 @@ D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.cs
 D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csproj.CoreCompileInputs.cache
 D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.dll
 D:\Projects\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.pdb
+D:\GIT\MidiEditor\VsProject\Source\obj\Debug\Sanford.Multimedia.Midi.csprojAssemblyReference.cache

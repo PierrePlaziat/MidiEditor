@@ -40,7 +40,6 @@ namespace ScoreApp.MVC
 
         #endregion
 
-
         #region Zoom & Offset
 
         public StackPanel TracksPanel { get; set; }
@@ -78,9 +77,12 @@ namespace ScoreApp.MVC
         }
         
         private float yZoom = 1;
-        internal double marginPercent = 25;
+        internal double marginPercent = 0.25;
         internal double absoluteTimePosition = 0;
         internal double relativeTimePosition = 0;
+
+
+        public const int touchOffset = 15;
 
         public float YZoom
         {
@@ -98,7 +100,9 @@ namespace ScoreApp.MVC
             }
         }
 
+        public double Headerwidth { get; internal set; } = 200;
+
         #endregion
-        
+
     }
 }

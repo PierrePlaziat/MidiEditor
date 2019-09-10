@@ -14,7 +14,7 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         #region CTOR
 
-        MidiLineView View { get; set; }
+        public MidiLineView View { get; set; }
         MidiLineModel Model { get; set; }
         
         public MidiLineControl (MidiLineModel model, MidiLineView view)

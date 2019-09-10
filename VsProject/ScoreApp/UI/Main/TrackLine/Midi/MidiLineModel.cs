@@ -81,10 +81,19 @@ namespace ScoreApp.TrackLine.MvcMidi
             }
         }
 
-        #pragma warning restore S3237
+#pragma warning restore S3237
         #endregion
 
-        public double XOffset { get; internal set; }
+        private double xOffset;
+        public double XOffset
+        {
+            get { return xOffset; }
+            set
+            {
+                xOffset = value;
+                Ctrl.View.TrackBody.Margin = new Thickness(-XOffset,0,0,0);
+            }
+        }
         public double DAWhosReso { get; } = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"]);
 
         #endregion
