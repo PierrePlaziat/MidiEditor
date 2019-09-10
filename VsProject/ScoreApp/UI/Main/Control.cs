@@ -67,7 +67,7 @@ namespace ScoreApp.MVC
 
         private void Update(object sender, EventArgs e)
         {
-            vue.Update();
+            vue.TimeUpdate();
         }
         
 
@@ -75,7 +75,7 @@ namespace ScoreApp.MVC
         {
             int newScrollValue = (int) vue.TimeScroller.Value;
             MidiManager.Time = newScrollValue;
-            vue.Update();
+            vue.TimeUpdate();
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sanford.Multimedia.Midi.UI;
+using ScoreApp.TrackLine.MvcMidi;
 
 namespace ScoreApp.MVC
 {
@@ -14,7 +15,7 @@ namespace ScoreApp.MVC
 
         #region ATRB
 
-        const int notationOffset = 15;
+        const int touchOffset = 15;
 
         #endregion
 
@@ -62,7 +63,7 @@ namespace ScoreApp.MVC
                 Ctrl.ZoomTracksY(value);
             }
         }
-
+        
         #region MENU
 
         private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
@@ -86,7 +87,63 @@ namespace ScoreApp.MVC
 
         #endregion
 
-        #region PLAY GESTION
+        #region UPDATE
+        
+        /// Continuously called when played
+        public void TimeUpdate()
+        {
+            // Guard
+            if (Model.TracksPanel.Children.Count > 0) return;
+            Model.absoluteTimePosition = MidiManager.Time * Model.timeWidth / Model.midiResolution;
+            Model.relativeTimePosition = HandleXOffset();
+            HandleTimeScroller();
+            HandleTimeBar();
+        }
+
+        #region Private
+
+        // remember to XOffset the track
+
+        // TODO
+        private double HandleXOffset()
+        {
+            double width = ((MidiLineView)Model.TracksPanel.Children[0]).Width;
+            double margin = width / Model.marginPercent;
+            double relativeTimePosition = Model.absoluteTimePosition - Model.XOffset;
+            if (relativeTimePosition > width - margin)
+            {
+                double delta = relativeTimePosition - width - margin;
+                Model.XOffset += delta;
+                relativeTimePosition = width - margin;
+            }
+            //if (absoluteTimePosition > width + touchOffset - margin)
+            //{
+            //    Model.XOffset = 0;
+
+            //}
+            return relativeTimePosition;
+        }
+
+        private void HandleTimeBar()
+        {
+            double timeBarPosition = Model.absoluteTimePosition + touchOffset - Model.XOffset;
+            TimeBar.SetValue(Canvas.LeftProperty, timeBarPosition);
+        }
+
+        // TODO
+        private void HandleTimeScroller()
+        {
+            TimeScroller.Value = Math.Min(
+                Model.absoluteTimePosition,
+                TimeScroller.Maximum
+            );
+        }
+
+        #endregion
+
+        #endregion
+
+        #region PLAY Palette
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -101,13 +158,6 @@ namespace ScoreApp.MVC
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             Ctrl.Stop();
-        }
-
-        public void Update()
-        {
-            double timePosition = MidiManager.Time * Model.timeWidth / Model.midiResolution;
-            TimeScroller.Value = Math.Min(MidiManager.Time, TimeScroller.Maximum);
-            TimeBar.SetValue(Canvas.LeftProperty, timePosition + notationOffset - Model.XOffset);
         }
 
         #region PIANO WIDGET
@@ -128,7 +178,7 @@ namespace ScoreApp.MVC
 
         #endregion
 
-        #region UI ACCESS
+        #region User Interractions ON/OFF
 
         public void EnableUserInterractions()
         {

@@ -1,6 +1,5 @@
 ﻿using Sanford.Multimedia.Midi;
 using System;
-using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -41,13 +40,13 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         private void Grid_GotFocus(object sender, RoutedEventArgs e)
         {
-            Border.BorderThickness = SelectedBorderThickness;
+            Border.BorderThickness = Model.SelectedBorderThickness;
             Ctrl.TrackGotFocus(sender, e); 
         }
 
         private void Grid_LostFocus(object sender, RoutedEventArgs e)
         {
-            Border.BorderThickness = UnselectedBorderThickness;
+            Border.BorderThickness = Model.UnselectedBorderThickness;
         }
 
         #endregion
@@ -58,6 +57,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         private void TrackBody_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Model.mouseDragStartPoint =  e.GetPosition((Canvas)sender);
+
             Model.isDragging = true;
         }
 
@@ -65,11 +65,12 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             if (Model.isDragging)
             {
-
+                // update  
                 Model.isDragging = false;
                 Model.mouseDragEndPoint = e.GetPosition((Canvas)sender);
                 double start = Model.mouseDragStartPoint.X/ Model.CellWidth;
                 double end = Model.mouseDragEndPoint.X / Model.CellWidth;
+                // TODO work here
                 int noteIndex = 127 - (int)(Model.mouseDragStartPoint.Y/Model.CellHeigth);
                 Ctrl.InsertNote(start,end,noteIndex);
             }

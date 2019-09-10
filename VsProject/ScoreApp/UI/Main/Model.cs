@@ -46,8 +46,8 @@ namespace ScoreApp.MVC
         public StackPanel TracksPanel { get; set; }
 
 
-        private int xOffset = 0;
-        public int XOffset {
+        private double xOffset = 0;
+        public double XOffset {
             get { return xOffset; }
             set
             {
@@ -78,6 +78,10 @@ namespace ScoreApp.MVC
         }
         
         private float yZoom = 1;
+        internal double marginPercent = 25;
+        internal double absoluteTimePosition = 0;
+        internal double relativeTimePosition = 0;
+
         public float YZoom
         {
             get { return yZoom; }

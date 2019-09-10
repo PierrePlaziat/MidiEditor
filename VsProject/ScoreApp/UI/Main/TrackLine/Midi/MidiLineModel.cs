@@ -84,7 +84,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         #pragma warning restore S3237
         #endregion
 
-        public int XOffset { get; internal set; }
+        public double XOffset { get; internal set; }
         public double DAWhosReso { get; } = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"]);
 
         #endregion
