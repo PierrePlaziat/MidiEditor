@@ -1,25 +1,13 @@
-Sanford.Multimedia.Midi
-=======================
+# MidiEditor
 
-This is all source code of the C# MIDI toolkit from CodeProject by Leslie Sanford.
+.NET Framework C# WPF Application
 
-Improvements:
-- 64-bit compatible
-- Windows 8 and 10 compatible
-- Mono framework compatible on Windows
-- Does not require additional assemblies
-- Faster midi file reading in Release build
+Implements https://github.com/tebjan/Sanford.Multimedia.Midi
 
-Also avaliable on Nuget.org
+Aim is to mimic guitarpro and ableton features
+In my own extendable midiroll tool
+This is a work in progress
+Made for personnal research, combining work with passion
 
-    PM> Install-Package Sanford.Multimedia.Midi
-
-If you have any improvement or fix to this library, please don't hesitate to make a fork and open a pull request.
-
-MIT License
-
-Credits:
-
-http://www.codeproject.com/Articles/6228/C-MIDI-Toolkit
-
-https://code.google.com/p/vsticks/
+Greetings,
+Pierre Plaziat 
