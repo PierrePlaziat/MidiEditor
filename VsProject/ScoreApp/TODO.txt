@@ -1,13 +1,11 @@
-﻿			DEBUG
+﻿
+			DEBUG
 				pause on track end reach
-				Grid Slide
-				(manual scroll always get 0)
+				manual scroll always get 0
 			TODO 
-				UiManager
-					Config
-					State
-					Input
-						scroll on maj+molette
+				Midi Instrument dropdown
+				Expand Lines
+					GridSeparators/buttonForHeigth
 				Note input rework
 					DoubleClick
 						Cell OnOff
@@ -17,5 +15,39 @@
 						border: alter note time
 					+/-
 						plot time length 	
+				Rework Scroll 
+				UiManager
+					Config
+					State
+					Input
+						scroll on maj+molette
 
 			THEN
+				save gestion
+				visualization tools
+				Wave generator
+				configuration window
+					INputs
+					OUTputs
+					UI
+						allow zoom on play
+						cell parameters
+					MidiFonts
+				Panel
+					Piano
+					Guitar
+					TrackSelected
+					MidiWatch
+					Visualizer
+					Generator
+				Clips
+				Track Name as midi Msg
+				Playback on plot function
+				LATER
+					Externalize piano to flying window
+					Integrate
+						AngularScore
+						ScaleGen
+						WaveGen
+					File/ New and Save support
+					LineTypes Architecture
