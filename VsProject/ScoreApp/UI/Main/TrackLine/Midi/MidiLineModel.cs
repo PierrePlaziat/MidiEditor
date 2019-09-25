@@ -61,7 +61,7 @@ namespace ScoreApp.TrackLine.MvcMidi
             {
                 RaisePropertyChanged("CellWidth");
                 RaisePropertyChanged("CellHeigth");
-                Ctrl.DrawNoteAppelations();
+                Ctrl.DrawPianoRoll();
                 Ctrl.DrawMidiEvents();
             }
         }
@@ -76,7 +76,7 @@ namespace ScoreApp.TrackLine.MvcMidi
             {
                 RaisePropertyChanged("CellHeigth");
                 RaisePropertyChanged("CellWidth");
-                Ctrl.DrawNoteAppelations();
+                Ctrl.DrawPianoRoll();
                 Ctrl.DrawMidiEvents();
             }
         }
@@ -92,10 +92,18 @@ namespace ScoreApp.TrackLine.MvcMidi
             {
                 xOffset = value;
                 //Console.WriteLine(":" + XOffset);
-                Ctrl.View.TrackBody.Margin = new Thickness(-XOffset,0,0,0);
+                Ctrl.view.TrackBody.Margin = new Thickness(-XOffset,0,0,0);
             }
         }
         public double DAWhosReso { get; } = double.Parse(ConfigurationManager.AppSettings["DAWhosReso"]);
+        public double PlotReso
+        {
+            get
+            {
+                return 1 / PlotResoDivider;
+            }
+        }
+        public double PlotResoDivider = 4;
 
         #endregion
 

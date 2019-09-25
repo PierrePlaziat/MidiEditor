@@ -5,6 +5,8 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using TrackExtensions;
 using System.Media;
+using System.Windows;
+using System.Linq;
 
 namespace ScoreApp.MVC
 {
@@ -73,6 +75,7 @@ namespace ScoreApp.MVC
 
         internal void ManualScroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
         {
+            if (MidiManager.IsPlaying) return;
             int newScrollValue = (int) vue.TimeScroller.Value;
             MidiManager.Time = newScrollValue;
             vue.TimeUpdate();
@@ -85,13 +88,72 @@ namespace ScoreApp.MVC
         public void InitTracks()
         {
             vue.TracksPanel.Children.Clear();
+            vue.TracksPanel.RowDefinitions.Clear();
+            int i = 0;
             foreach (Track track in MidiManager.Tracks) 
             {
-                track.Id(); // init track id
-                MidiLineView lineView = new MidiLineView(track);
-                lineView.Ctrl.TrackFocused += FocusTrack;
-                vue.TracksPanel.Children.Add(new Frame() { Content = lineView } );
+                MidiLineView lineView = InitTrackLine(i,track);
+                AddTrackGridRow(i,lineView);
+                AddSeparatorGridRow(i);
+                i++;
             }
+            vue.TracksPanel.RowDefinitions.Add(
+               new RowDefinition()
+               {
+                   Height = new GridLength(400, GridUnitType.Pixel)
+               }
+           );
+
+        }
+
+        private MidiLineView InitTrackLine(int rowIndex, Track track)
+        {
+            track.Id();
+            track.Channel = rowIndex;
+            MidiLineView lineView = new MidiLineView(track);
+            lineView.Ctrl.TrackFocused += FocusTrack;
+            return lineView;
+        }
+
+        private void AddSeparatorGridRow(int rowIndex)
+        {
+            // make row
+            vue.TracksPanel.RowDefinitions.Add(
+                new RowDefinition()
+                {
+                    Height = new GridLength(3, GridUnitType.Pixel)
+                }
+            );
+            // add separator in row
+            var separator = new GridSplitter()
+            {
+                Height = 3,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Background = Brushes.Black,
+            };
+            vue.TracksPanel.Children.Add(separator);
+            Grid.SetRow(separator, 2 * rowIndex + 1);
+        }
+
+        private void AddTrackGridRow(int rowIndex, MidiLineView lineView)
+        {
+            // make row
+            vue.TracksPanel.RowDefinitions.Add(
+                new RowDefinition()
+                {
+                    // todo set in ui manager
+                    Height = new GridLength(100/*(double)12 * lineView.Model.CellHeigth*/, GridUnitType.Pixel),
+                    MaxHeight = 500, //127 * lineView.Model.CellHeigth,
+                    MinHeight = 100 //lineView.Model.CellHeigth
+                }
+            );
+            // add trackline in row
+            var trackLine = new Frame()
+            {
+                Content = lineView
+            };
+            vue.TracksPanel.Children.Add(trackLine);
+            Grid.SetRow(trackLine, 2 * rowIndex);
         }
 
         public void AddTrack()
@@ -102,6 +164,7 @@ namespace ScoreApp.MVC
 
         internal void RemoveTrack()
         {
+            if (!MidiManager.Tracks.Any()) return;
             MidiManager.RemoveTrack(model.SelectedTrack);
             InitTracks();
         }

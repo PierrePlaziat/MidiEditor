@@ -52,28 +52,31 @@ namespace ScoreApp.TrackLine.MvcMidi
         #endregion
 
         #region MOUSE GESTION
-        // TODO better plot (ableton style)
-        
+
         private void TrackBody_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Model.mouseDragStartPoint =  e.GetPosition((Canvas)sender);
-
-            Model.isDragging = true;
+            if (e.ClickCount>1)
+            {
+                Model.mouseDragStartPoint = e.GetPosition((Canvas)sender);
+                double point = Model.mouseDragStartPoint.X / Model.CellWidth;
+                int noteIndex = 127 - (int)(Model.mouseDragStartPoint.Y / Model.CellHeigth);
+                Ctrl.InsertNote(PreviousFirstPosition(point), NextFirstPosition(point), noteIndex);
+            }
         }
 
-        private void TrackBody_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private double NextFirstPosition(double point)
         {
-            if (Model.isDragging)
-            {
-                // update  
-                Model.isDragging = false;
-                Model.mouseDragEndPoint = e.GetPosition((Canvas)sender);
-                double start = Model.mouseDragStartPoint.X/ Model.CellWidth;
-                double end = Model.mouseDragEndPoint.X / Model.CellWidth;
-                // TODO work here
-                int noteIndex = 127 - (int)(Model.mouseDragStartPoint.Y/Model.CellHeigth);
-                Ctrl.InsertNote(start,end,noteIndex);
-            }
+            return Model.PlotReso * (1+((int)(point / Model.PlotReso)));
+        }
+
+        private double PreviousFirstPosition(double point)
+        {
+            return Model.PlotReso * ((int)(point / Model.PlotReso));
+        }
+
+        private void TrackBody_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
         }
 
         private void MouseWheel(object sender, MouseWheelEventArgs e)
@@ -101,7 +104,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         // TODO midi instrument selection
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MidiManager.ChangeInstrument(Model.Track, ComboInstruments.Text);
+            MidiManager.ChangeInstrument(Model.Track, ComboInstruments.SelectedIndex);
         }
 
         #endregion

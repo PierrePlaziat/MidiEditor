@@ -1,21 +1,15 @@
 ﻿
 			DEBUG
-				pause on track end reach
-				manual scroll always get 0
+				track channel instrument
 			TODO 
-				Midi Instrument dropdown
-				Expand Lines
-					GridSeparators/buttonForHeigth
+				Midi Instrument / track channel
 				Note input rework
-					DoubleClick
-						Cell OnOff
 					drag
 						empty selection rectangle
 						center: move note
 						border: alter note time
-					+/-
-						plot time length 	
 				Rework Scroll 
+				button For fullscreen trackline
 				UiManager
 					Config
 					State

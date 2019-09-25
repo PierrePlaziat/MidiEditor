@@ -5,6 +5,8 @@ namespace Sanford.Multimedia.Midi
 {
     public sealed partial class Track
     {
+        public int Channel { get; set; }
+
         [Conditional("DEBUG")]
         public static void Test()
         {

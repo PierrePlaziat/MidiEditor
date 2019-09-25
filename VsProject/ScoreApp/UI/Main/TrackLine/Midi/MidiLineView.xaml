@@ -13,8 +13,14 @@
 		<cv:DoubleToRectConverter x:Key="DoubleToRectConverter"/>
 	</Page.Resources>
 
-	<Border BorderBrush="BlueViolet" BorderThickness="0" Name="Border" GotFocus="Grid_GotFocus" LostFocus="Grid_LostFocus">
-		<Grid HorizontalAlignment="Stretch" Margin="0,0,0,1" Background="Gray">
+	<Border BorderBrush="BlueViolet" BorderThickness="0" Name="Border" >
+        <Grid 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            Margin="0,0,0,1" 
+            Background="Gray"
+            GotFocus="Grid_GotFocus"
+            LostFocus="Grid_LostFocus">
 
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="200"></ColumnDefinition>
@@ -25,7 +31,10 @@
 
 
 			<!-- TrackHead -->
-			<Grid Name="TrackHeader"  Width="200" HorizontalAlignment="Left" Grid.Column="0">
+            <Grid Name="TrackHeader"  Width="200" HorizontalAlignment="Left" Grid.Column="0"
+            GotFocus="Grid_GotFocus"
+            LostFocus="Grid_LostFocus"
+                  Focusable="True">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="10"></ColumnDefinition>
 					<ColumnDefinition Width="*"></ColumnDefinition>
@@ -52,7 +61,7 @@
 			<GridSplitter></GridSplitter>
 
 			<!-- TrackBody -->
-			<ScrollViewer Name="BodyScroll" Grid.Column="1" Background="White" Margin="0" VerticalScrollBarVisibility="Visible" Height="100">
+			<ScrollViewer VerticalAlignment="Stretch" Name="BodyScroll" Grid.Column="1" Background="White" Margin="0" VerticalScrollBarVisibility="Visible">
 				<DockPanel>
 					<Canvas Name="TrackNotes" Width="15" Background="white">
 					</Canvas>
@@ -80,6 +89,8 @@
                 VerticalAlignment="Top" 
                 Width="154" 
                 SelectionChanged="ComboBox_SelectionChanged">
+
+            
             </ComboBox>
 
 

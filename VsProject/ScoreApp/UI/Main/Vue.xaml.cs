@@ -141,9 +141,9 @@ namespace ScoreApp.MVC
             return relativeTimePosition;
         }
 
-        private void HandleTimeBar()
+        public void HandleTimeBar()
         {
-            TimeBar.SetValue(Canvas.LeftProperty, Model.relativeTimePosition+Model.touchOffset );
+            TimeBar.SetValue(Canvas.LeftProperty, (Model.relativeTimePosition*Model.XZoom)+Model.touchOffset );
         }
 
         // TODO

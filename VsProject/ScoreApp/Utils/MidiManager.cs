@@ -121,9 +121,18 @@ namespace ScoreApp
             }
         }
 
-        internal static void ChangeInstrument(Track track, string text)
+        internal static void ChangeInstrument(Track track, int instrument)
         {
             // TODO
+            
+            cmBuilder.Command = ChannelCommand.ProgramChange;
+            if (outDevice != null)
+            {
+                cmBuilder.Data1 = instrument;
+                cmBuilder.MidiChannel = track.Channel;
+                cmBuilder.Build();
+                outDevice.Send(cmBuilder.Result);
+            }
         }
 
         #endregion
@@ -165,7 +174,7 @@ namespace ScoreApp
 
         private static void HandlePlayingCompleted(object sender, EventArgs e)
         {
-            Timer.Stop();
+            Stop();
         }
 
         #endregion
