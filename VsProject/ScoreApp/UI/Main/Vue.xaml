@@ -81,7 +81,7 @@
             <Label FontSize="9">PlotDivider</Label>
             <TextBox Text="{Binding PlotDivider}" Width="50"/>
             <Label FontSize="9">PlotVelocity</Label>
-            <TextBox Text="{Binding PlotVelocity}" Width="50"/>
+            <TextBox Text="{Binding PlotVelocity}" Width="50" Height="20" VerticalAlignment="Top"/>
             <Label FontSize="9">ZoomX</Label>
             <TextBox Text="{Binding XZoom}" Width="50"/>
             <Label FontSize="9">ZoomY</Label>

@@ -6,6 +6,7 @@ using TrackExtensions;
 using ScoreApp.Utils;
 using System.Configuration;
 using System.Windows;
+using ScoreApp.Managers;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
@@ -55,7 +56,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             get
             {
-                return (MidiManager.attachedView.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"]));
+                return (UiManager.mainWindow.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"]));
             }
             set
             {
@@ -70,7 +71,7 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             get
             {
-                return (MidiManager.attachedView.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]));
+                return (UiManager.mainWindow.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]));
             }
             set
             {
@@ -100,10 +101,9 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             get
             {
-                return 1 / PlotResoDivider;
+                return 1 / UiManager.plotDivider;
             }
         }
-        public double PlotResoDivider = 4;
 
         #endregion
 

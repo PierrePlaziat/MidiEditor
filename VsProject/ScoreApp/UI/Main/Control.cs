@@ -4,9 +4,9 @@ using System;
 using System.Windows.Media;
 using System.Windows.Controls;
 using TrackExtensions;
-using System.Media;
 using System.Windows;
 using System.Linq;
+using ScoreApp.Managers;
 
 namespace ScoreApp.MVC
 {
@@ -23,12 +23,7 @@ namespace ScoreApp.MVC
             this.model = model;
             this.vue = vue;
             model.TracksPanel = vue.TracksPanel;
-            InitModel();
-        }
-
-        private void InitModel()
-        {
-            MidiManager.Timer.Tick += Update;
+            //MidiManager.Timer.Tick += Update;
         }
 
         public void InitVue()
@@ -55,19 +50,9 @@ namespace ScoreApp.MVC
 
         #endregion
 
-        #region PLAY GESTION
-
-        internal void Start()
-        {
-            MidiManager.Start();
-        }
-
-        internal void Stop()
-        {
-            MidiManager.Stop();
-        }
-
-        private void Update(object sender, EventArgs e)
+        #region Scroll
+        
+        public void Update(object sender, EventArgs e)
         {
             vue.TimeUpdate();
         }
@@ -77,7 +62,7 @@ namespace ScoreApp.MVC
         {
             if (MidiManager.IsPlaying) return;
             int newScrollValue = (int) vue.TimeScroller.Value;
-            MidiManager.Time = newScrollValue;
+            MidiManager.CurrentTime = newScrollValue;
             vue.TimeUpdate();
         }
 
@@ -141,10 +126,9 @@ namespace ScoreApp.MVC
             vue.TracksPanel.RowDefinitions.Add(
                 new RowDefinition()
                 {
-                    // todo set in ui manager
-                    Height = new GridLength(100/*(double)12 * lineView.Model.CellHeigth*/, GridUnitType.Pixel),
-                    MaxHeight = 500, //127 * lineView.Model.CellHeigth,
-                    MinHeight = 100 //lineView.Model.CellHeigth
+                    Height = new GridLength(UiManager.TrackHeightDefault, GridUnitType.Pixel),
+                    MaxHeight = UiManager.TrackHeightMax,
+                    MinHeight = UiManager.TrackHeightMin,
                 }
             );
             // add trackline in row

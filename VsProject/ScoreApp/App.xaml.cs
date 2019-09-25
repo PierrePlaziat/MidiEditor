@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using ScoreApp.Managers;
+using System.Windows;
 
 namespace ScoreApp
 {
@@ -12,8 +13,8 @@ namespace ScoreApp
 
         public App()
         {
-            MidiManager.Init(new MVC.Vue());
-            MidiManager.attachedView.Initialize();
+            MidiManager.Init();
+            UiManager.Init();
         }
 
     }

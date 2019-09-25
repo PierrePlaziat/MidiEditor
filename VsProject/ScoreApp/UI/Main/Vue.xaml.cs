@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sanford.Multimedia.Midi.UI;
+using ScoreApp.Managers;
 using ScoreApp.TrackLine.MvcMidi;
 
 namespace ScoreApp.MVC
@@ -88,7 +89,7 @@ namespace ScoreApp.MVC
         {
             // Guard
             //if (Model.TracksPanel.Children.Count > 0) return;
-            Model.absoluteTimePosition = MidiManager.Time * Model.timeWidth / Model.midiResolution ;
+            Model.absoluteTimePosition = MidiManager.CurrentTime * Model.timeWidth / Model.midiResolution ;
             Model.relativeTimePosition = HandleTrackSlide();
             HandleTimeScroller();
             HandleTimeBar();
@@ -163,7 +164,7 @@ namespace ScoreApp.MVC
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            Ctrl.Start();
+            MidiManager.Start();
         }
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
@@ -173,7 +174,7 @@ namespace ScoreApp.MVC
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            Ctrl.Stop();
+            MidiManager.Stop();
         }
 
         #region PIANO WIDGET
@@ -212,14 +213,6 @@ namespace ScoreApp.MVC
             continueButton.IsEnabled = false;
             stopButton.IsEnabled = false;
             OpenMenuItem.IsEnabled = false;
-        }
-
-        public void ErrorMessage(string message)
-        {
-            System.Windows.Forms.MessageBox.Show(
-                       message,
-                       "Error!",
-                       MessageBoxButtons.OK);
         }
 
         #endregion

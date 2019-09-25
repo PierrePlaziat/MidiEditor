@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Configuration;
 using System.Windows.Controls;
+using ScoreApp.Managers;
 using ScoreApp.TrackLine.MvcMidi;
 using ScoreApp.Utils;
 
@@ -34,8 +35,8 @@ namespace ScoreApp.MVC
 
         public int Tempo
         {
-            get { return MidiManager.GetTempo(); }
-            set { MidiManager.SetTempo(value); RaisePropertyChanged("Tempo"); }
+            get { return MidiManager.Tempo; }
+            set { MidiManager.Tempo=value; RaisePropertyChanged("Tempo"); }
         }
 
         #endregion
@@ -80,7 +81,7 @@ namespace ScoreApp.MVC
                     ((MidiLineView)track.Content).Model.CellWidth = 
                         (int)(XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"])); 
                 }
-                MidiManager.attachedView.HandleTimeBar();
+                UiManager.mainWindow.HandleTimeBar();
             }
         }
         
@@ -114,40 +115,29 @@ namespace ScoreApp.MVC
 
 
         #endregion
-        //private double plotDivider;
-        //public double PlotDivider
-        //{
-        //    get { return ; }
-        //    set
-        //    {
-        //        if (value < .1f) value = .1f;
-        //        yZoom = value;
-        //        RaisePropertyChanged("YZoom");
-        //        foreach (Frame track in TracksPanel.Children)
-        //        {
-        //            ((MidiLineView)track.Content).Model.CellHeigth =
-        //                (int)(YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]));
-        //        }
-        //    }
-        //}
+
+        private double plotDivider=4;
+        public double PlotDivider
+        {
+            get { return plotDivider; }
+            set
+            {
+                plotDivider = value;
+                RaisePropertyChanged("PlotDivider");
+            }
+        }
 
 
-        //private int plotVelocity = 100
-        //public int PlotVelocity
-        //{
-        //    get { return yZoom; }
-        //    set
-        //    {
-        //        if (value < .1f) value = .1f;
-        //        yZoom = value;
-        //        RaisePropertyChanged("YZoom");
-        //        foreach (Frame track in TracksPanel.Children)
-        //        {
-        //            ((MidiLineView)track.Content).Model.CellHeigth =
-        //                (int)(YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]));
-        //        }
-        //    }
-        //}
+        private int plotVelocity = 100;
+        public int PlotVelocity
+        {
+            get { return plotVelocity; }
+            set
+            {
+                plotVelocity = value;
+                RaisePropertyChanged("PlotVelocity");
+            }
+        }
 
 
 

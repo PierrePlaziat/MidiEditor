@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Input;
 using TrackExtensions;
+using ScoreApp.Managers;
 
 namespace ScoreApp.TrackLine.MvcMidi
 {
@@ -77,14 +78,15 @@ namespace ScoreApp.TrackLine.MvcMidi
         {
             if (MidiManager.IsPlaying) return;
             // Generate Midi Note
-            int channel = 0; int intensity = 100;
+            int channel = 0;
+            int velocity = UiManager.plotVelocity;
             var msgs = MidiManager.CreateNote(
                 channel, 
                 noteIndex,
                 model.Track,
                 start,
                 end,
-                intensity);
+                velocity);
             // Draw it on MidiRoll
             DrawNote(start,end,noteIndex, msgs.Item1, msgs.Item2);
         }

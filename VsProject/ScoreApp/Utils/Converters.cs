@@ -1,4 +1,5 @@
 ﻿using ScoreApp;
+using ScoreApp.Managers;
 using System;
 using System.Configuration;
 using System.Windows;
@@ -14,8 +15,8 @@ namespace Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return new Rect(0, 0,
-                (MidiManager.attachedView.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"])),
-                (MidiManager.attachedView.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]))
+                (UiManager.mainWindow.Model.XZoom * int.Parse(ConfigurationManager.AppSettings["cellWidth"])),
+                (UiManager.mainWindow.Model.YZoom * int.Parse(ConfigurationManager.AppSettings["cellHeigth"]))
             );
         }
 

@@ -2,11 +2,10 @@
 using Sanford.Multimedia.Midi;
 using System.Windows.Forms;
 using System.ComponentModel;
-using ScoreApp.MVC;
 using System.Configuration;
 using System.Collections.Generic;
 
-namespace ScoreApp
+namespace ScoreApp.Managers
 {
 
     /// Connects ScoreApp to Sanford Midi
@@ -14,66 +13,34 @@ namespace ScoreApp
     {
 
         #region ATRB
-
-
-        // IO
-
-        private static OutputDevice outDevice;
-        public static Timer Timer { get; } = new Timer(); 
-
-        // MIDI BUILDER
-
-        private static ChannelMessageBuilder cmBuilder = new ChannelMessageBuilder();
-        //private static SysCommonMessageBuilder scBuilder = new SysCommonMessageBuilder();
-
-        // SEQUENCER
-
-        private static Sequencer sequencer;
-        public static bool IsPlaying { get; set; } = false;
-        public static int Time
-        {
-            get { return sequencer.Position; } 
-            set { sequencer.Position = value; }
-        }
-
-        public static int GetTempo()
-        {
-            return sequencer.clock.Tempo;
-        }
-
-        public static void SetTempo(int value)
-        {
-            if (value < 1) value = 1;
-            sequencer.clock.Tempo = value;
-        }
-
-        // SEQUENCE
-
-        private static Sequence sequence;
-        public static IEnumerable<Track> Tracks
-        {
-            get { return sequence.tracks; }
-        }
-
-        #endregion
         
+        // IO
+        private static OutputDevice outDevice;
+        private static InputDevice inDevice;
+        private static Timer Timer = new Timer();
+        // Midi Msg Gen
+        private static ChannelMessageBuilder cmBuilder = new ChannelMessageBuilder();
+        private static SysCommonMessageBuilder scBuilder = new SysCommonMessageBuilder();
+        // Midi sequencing
+        private static Sequencer sequencer;
+        private static Sequence sequence;
+        
+        #endregion
+
         #region CTOR
 
-        public static Vue attachedView { get; set; }
-
-        public static void Init(Vue vue)
+        public static void Init()
         {
-            attachedView = vue;
             InitSequencer();
-            if (CheckMidiOutput())
-                InitOutputDevice();
+            if (CheckMidiOutput()) InitOutputDevice();
+            Timer.Tick += UiManager.mainWindow.Ctrl.Update;
         }
 
         private static bool CheckMidiOutput()
         {
             if (OutputDevice.DeviceCount == 0)
             {
-                attachedView.ErrorMessage("No MIDI output devices available.");
+                UiManager.ThrowError("No MIDI output devices available.");
                 Unload();
                 return false;
             }
@@ -90,7 +57,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                attachedView.ErrorMessage(ex.Message);
+                UiManager.ThrowError(ex.Message);
                 Unload();
             }
         }
@@ -121,33 +88,19 @@ namespace ScoreApp
             }
         }
 
-        internal static void ChangeInstrument(Track track, int instrument)
-        {
-            // TODO
-            
-            cmBuilder.Command = ChannelCommand.ProgramChange;
-            if (outDevice != null)
-            {
-                cmBuilder.Data1 = instrument;
-                cmBuilder.MidiChannel = track.Channel;
-                cmBuilder.Build();
-                outDevice.Send(cmBuilder.Result);
-            }
-        }
-
         #endregion
-
-        #region MIDI MSG
+        
+        #region MIDI EVENTS
 
         private static void HandleChannelMessagePlayed(object sender, ChannelMessageEventArgs e)
         {
-            if (attachedView.Model.Closing)
+            if (UiManager.mainWindow.Model.Closing)
             {
                 return;
             }
 
             MidiManager.outDevice.Send(e.Message);
-            attachedView.Piano.Send(e.Message);
+            UiManager.mainWindow.Piano.Send(e.Message);
         }
 
         private static void HandleChased(object sender, ChasedEventArgs e)
@@ -168,7 +121,7 @@ namespace ScoreApp
             foreach (ChannelMessage message in e.Messages)
             {
                 MidiManager.outDevice.Send(message);
-                attachedView.Piano.Send(message);
+                UiManager.mainWindow.Piano.Send(message);
             }
         }
 
@@ -183,6 +136,33 @@ namespace ScoreApp
 
         #region PLAY/PAUSE GESTION
 
+        public static bool IsPlaying { get; set; } = false;
+
+        public static int CurrentTime
+        {
+            get
+            {
+                return sequencer.Position;
+            }
+            set
+            {
+                sequencer.Position = value;
+            }
+        }
+
+        public static int Tempo
+        {
+            get
+            {
+                return sequencer.clock.Tempo;
+            }
+            set
+            {
+                if (value < 1) value = 1;
+                sequencer.clock.Tempo = value;
+            }
+        }
+
         internal static void Start()
         {
             try
@@ -193,7 +173,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                attachedView.ErrorMessage(ex.Message);
+                UiManager.ThrowError(ex.Message);
             }
         }
 
@@ -207,7 +187,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                attachedView.ErrorMessage(ex.Message);
+                UiManager.ThrowError(ex.Message);
             }
         }
 
@@ -221,7 +201,7 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                attachedView.ErrorMessage(ex.Message);
+                UiManager.ThrowError(ex.Message);
             }
         }
 
@@ -246,6 +226,11 @@ namespace ScoreApp
 
         #region TRACK GESTION
 
+        public static IEnumerable<Track> Tracks
+        {
+            get { return sequence.tracks; }
+        }
+
         internal static void AddTrack()
         {
             sequence.tracks.Add(new Track());
@@ -254,6 +239,19 @@ namespace ScoreApp
         internal static void RemoveTrack(int selectedTrack)
         {
             sequence.tracks.RemoveAt(selectedTrack);
+        }
+        internal static void ChangeInstrument(Track track, int instrument)
+        {
+            // TODO
+            
+            cmBuilder.Command = ChannelCommand.ProgramChange;
+            if (outDevice != null)
+            {
+                cmBuilder.Data1 = instrument;
+                cmBuilder.MidiChannel = track.Channel;
+                cmBuilder.Build();
+                outDevice.Send(cmBuilder.Result);
+            }
         }
 
         #endregion
@@ -293,10 +291,10 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                attachedView.ErrorMessage(ex.Message);
+                UiManager.ThrowError(ex.Message);
             }
             // on success
-            attachedView.DisableUserInterractions();
+            UiManager.mainWindow.DisableUserInterractions();
         }
 
         internal static void OpenFile(string fileName)
@@ -309,34 +307,34 @@ namespace ScoreApp
             }
             catch (Exception ex)
             {
-                attachedView.ErrorMessage(ex.Message);
+                UiManager.ThrowError(ex.Message);
             }
             // on success
-            attachedView.DisableUserInterractions();
+            UiManager.mainWindow.DisableUserInterractions();
         }
 
         public static void HandleLoadProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            attachedView.ProgressionBar.Value = e.ProgressPercentage;
+            UiManager.mainWindow.ProgressionBar.Value = e.ProgressPercentage;
         }
 
         public static void HandleLoadCompleted(object sender, AsyncCompletedEventArgs e)
         {
 
-            attachedView.EnableUserInterractions();
+            UiManager.mainWindow.EnableUserInterractions();
 
-            attachedView.ProgressionBar.Value = 0;
+            UiManager.mainWindow.ProgressionBar.Value = 0;
             if (e.Error == null)
             {
-                attachedView.TimeScroller.Value = 0;
-                attachedView.TimeScroller.Maximum = MidiManager.sequence.GetLength();
+                UiManager.mainWindow.TimeScroller.Value = 0;
+                UiManager.mainWindow.TimeScroller.Maximum = MidiManager.sequence.GetLength();
             }
             else
             {
                 System.Windows.MessageBox.Show(e.Error.Message);
             }
-            attachedView.Model.Tempo = MidiManager.sequencer.clock.Tempo; // TODO tempo doesnt seem to be loaded from midi file that easy
-            attachedView.Ctrl.InitTracks(); 
+            UiManager.mainWindow.Model.Tempo = MidiManager.sequencer.clock.Tempo; // TODO tempo doesnt seem to be loaded from midi file that easy
+            UiManager.mainWindow.Ctrl.InitTracks(); 
         }
 
         #endregion

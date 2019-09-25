@@ -56,7 +56,8 @@
 					<Slider  Value="5" Orientation="Vertical" Height="66" />
 					<Button Content="S" Width="18" Height="16" FontSize="9"   />
 				</StackPanel>
-			</Grid>
+                <Label Grid.Column="1" x:Name="TrackName_Copy" Content="C1" Margin="0,0,0,24.5" Grid.Row="1" Grid.RowSpan="2"/>
+            </Grid>
 
 			<GridSplitter></GridSplitter>
 

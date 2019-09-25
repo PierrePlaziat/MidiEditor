@@ -62,8 +62,9 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Managers\UiManager.cs" />
     <Compile Include="Utils\HandleBinding.cs" />
-    <Compile Include="Utils\MidiManager.cs" />
+    <Compile Include="Managers\MidiManager.cs" />
     <Compile Include="Utils\Extension.cs" />
     <Compile Include="Utils\Converters.cs" />
     <Compile Include="UI\Main\TrackLine\Midi\MidiLineControl.cs" />

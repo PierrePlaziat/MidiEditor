@@ -1,4 +1,5 @@
 ﻿using Sanford.Multimedia.Midi;
+using ScoreApp.Managers;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -81,7 +82,7 @@ namespace ScoreApp.TrackLine.MvcMidi
 
         private void MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            MidiManager.attachedView.HandleWheel(sender, e);
+            UiManager.mainWindow.HandleWheel(sender, e);
         }
 
         #endregion
@@ -100,8 +101,7 @@ namespace ScoreApp.TrackLine.MvcMidi
             Model.Track.SetColor(color);
             Model.TColor = new SolidColorBrush(color); 
         }
-
-        // TODO midi instrument selection
+        
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MidiManager.ChangeInstrument(Model.Track, ComboInstruments.SelectedIndex);
